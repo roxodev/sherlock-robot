@@ -9,9 +9,9 @@ Library    String
 
 # Disponibilizando recursos
 Library    ${EXECDIR}/resources/Utils.py
-Library    ${EXECDIR}/src/config/SetupApi.py
-Library    ${EXECDIR}/src/config/SetupMeWeb.py
-Library    ${EXECDIR}/src/config/SetupSql.py
+Library    ${EXECDIR}/src/config/factories/SetupApi.py
+Library    ${EXECDIR}/src/config/factories/SetupMeWeb.py
+Library    ${EXECDIR}/src/config/factories/SetupSql.py
 Library    ${EXECDIR}/src/dao/api/Apis.py
 Library    ${EXECDIR}/src/pages/MeWeb.py
 
@@ -22,8 +22,8 @@ Resource    ${EXECDIR}/src/dao/api/Post.robot
 Resource    ${EXECDIR}/src/dao/api/Put.robot
 Resource    ${EXECDIR}/src/dao/sql/Post.robot
 Resource    ${EXECDIR}/src/dao/sql/Queries.robot
-Resource    ${EXECDIR}/tests/api/base/SetupApi.robot
-Resource    ${EXECDIR}/tests/e2e/base/SetupE2e.robot
+Resource    ${EXECDIR}/src/config/SetupApi.robot
+Resource    ${EXECDIR}/src/config/SetupE2e.robot
 Resource    ${EXECDIR}/tests/e2e/base/Login.robot
 Resource    ${EXECDIR}/tests/e2e/base/buyer/Cotacao.robot
 Resource    ${EXECDIR}/tests/e2e/base/supplier/Cotacao.robot

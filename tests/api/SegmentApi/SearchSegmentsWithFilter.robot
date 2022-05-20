@@ -50,16 +50,15 @@ Unauthorized
     ...       search_with_filter_unauthorized
 
     # Instanciando massa de dados
-    ${search_with_filter}    Factory Segment API    search_with_filter
-    ${events}                Factory Segment API    events
+    ${unauthorized}    Factory Segment API    unauthorized
 
     # Buscando segmentos
-    GET API    ${segment_api}/search?filter=${search_with_filter}[filter]&pageNumber=${search_with_filter}[page_number]&pageSize=${search_with_filter}[page_size]
+    GET API    ${segment_api}/search?filter=Componentes e Suprimentos de Fabricação&pageNumber=1&pageSize=10
     ...        ${empty}
     ...        401
 
     # Validando response
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
 
 *Keywords
 Bad request
