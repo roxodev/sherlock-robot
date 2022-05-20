@@ -16,27 +16,31 @@ Success
     ...       get_supplier_success
 
     # Instanciando massa de dados
-    ${get_supplier}    Factory Supplier Users API    get_supplier
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${success}    Factory Supplier Users API    success
 
     # Consultando supplier
-    GET API    ${supplier_users_api}/${get_supplier}[success][uuid]    
+    GET API    ${supplier_users_api}/d714faaf-af05-4590-86c9-1dbd94a1088f
     ...        ${headers}
     ...        200
 
-    # Criando dicionário para validação
-    ${supplier}    Set Variable    ${response.json()}
+    # Convertendo response body para string
+    ${response_body}=    Convert to string    ${response.json()}
 
-    # Removendo chaves desnecessárias
-    Remove from dictionary    ${supplier}
-    ...                       currentUser
-    ...                       accessUsers
-    ...                       userCompanies
+    # Criando lista para validação
+    @{supplier_infos}    Create list
+    ...                  d714faaf-af05-4590-86c9-1dbd94a1088f
+    ...                  Lucas Roxo
+    ...                  lucas.roxo@me.com.br
 
-    # Validando response
-    Should be equal as strings    ${supplier}    ${get_supplier}[success][response]
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${success}[reason]
+
+    # Validando response body
+    FOR    ${supplier_info}    IN    @{supplier_infos}
+
+    Should contain    ${response_body}    ${supplier_info}
+
+    END
 
 Unauthorized
     [Tags]    api
@@ -45,19 +49,15 @@ Unauthorized
     ...       get_supplier_unauthorized
 
     # Instanciando massa de dados
-    ${get_supplier}    Factory Supplier Users API    get_supplier
-    ${events}          Factory Supplier Users Api    events
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${unauthorized}    Factory Supplier Users API    unauthorized
 
     # Consultando supplier
-    GET API    ${supplier_users_api}/${get_supplier}[unauthorized][uuid]    
+    GET API    ${supplier_users_api}/d714faaf-af05-4590-86c9-1dbd94a1088f    
     ...        ${empty}
     ...        401
 
     # Validando evento
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
 
 Not found
     [Tags]    api
@@ -66,16 +66,12 @@ Not found
     ...       get_supplier_not_found
 
     # Instanciando massa de dados
-    ${get_supplier}    Factory Supplier Users API    get_supplier
-    ${events}          Factory Supplier Users Api    events
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${not_found}    Factory Supplier Users API    not_found
 
     # Consultando supplier
-    GET API    ${supplier_users_api}/${get_supplier}[not_found][uuid]    
-    ...        ${empty}
-    ...        401
+    GET API    ${supplier_users_api}/a0144c8d-a0dc-4296-becd-769f458cfa1e    
+    ...        ${headers}
+    ...        404
 
     # Validando evento
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
+    Should be equal as strings    ${response.reason}    ${not_found}[reason]

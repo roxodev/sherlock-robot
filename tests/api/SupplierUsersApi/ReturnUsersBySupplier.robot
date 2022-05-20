@@ -16,19 +16,31 @@ Success
     ...       return_users_success
 
     # Instanciando massa de dados
-    ${return_users}    Factory Supplier Users API    return_users
-
-    # Definindo header e payload
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${success}    Factory Supplier Users API    success
 
     # Consultando suppliers via email
-    POST API    ${supplier_users_api}/relation?email=${return_users}[email]
-    ...         ${headers}                                                     
+    POST API    ${supplier_users_api}/relation?email=lucas.roxo@me.com.br
+    ...         ${headers}                                                   
     ...         ${empty}
     ...         200
 
+    # Convertendo response body para string
+    ${response_body}=    Convert to string    ${response.json()}
+
+    # Criando lista para validação
+    @{users}    Create list 
+    ...         3643278
+    ...         4027082
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${success}[reason]
+
+    FOR    ${user}    IN    @{users}
+
     # Validando response
-    Should be equal as strings    ${response.json()}    ${return_users}[response]
+    Should contain    ${response_body}    ${user}
+
+    END
 
 Bad Request
     [Tags]    api
@@ -37,10 +49,7 @@ Bad Request
     ...       return_users_bad_request
 
     # Instanciando massa de dados
-    ${events}    Factory Supplier Users Api    events
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${bad_request}    Factory Supplier Users API    bad_request
 
     # Consultando suppliers via email
     POST API    ${supplier_users_api}/relation?email=
@@ -48,8 +57,14 @@ Bad Request
     ...         ${empty}
     ...         400
 
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][email]    ${events}[email]
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${response_body}=    Convert to string    ${response.json()}
+
+    # Validando response body
+    Should contain    ${response_body}    ${bad_request}[errors][email]
 
 Unauthorized
     [Tags]    api
@@ -58,10 +73,7 @@ Unauthorized
     ...       return_users_unauthorized
 
     # Instanciando massa de dados
-    ${events}    Factory Supplier Users Api    events
-
-    # Definindo header e payload
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${unauthorized}    Factory Supplier Users Api    unauthorized
 
     # Consultando suppliers via email
     POST API    ${supplier_users_api}/relation?email=
@@ -70,30 +82,4 @@ Unauthorized
     ...         401
 
     # Validando evento
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
-
-*Keywords
-Bad request
-    [Arguments]    ${chave}
-
-    # Instanciando massa de dados
-    ${return_buyers}    Factory Supplier Users API    return_buyers
-    ${events}           Factory Supplier Users Api    events
-
-    # Definindo header e payload
-    ${headers}                  Create Dictionary    Authorization=Bearer ${access_token}
-    ${return_buyers_payload}    Set Variable         ${return_buyers}[payload]
-
-    # Populando payload com dados inválidos conforme chave informada
-    Set to dictionary    ${return_buyers_payload}    
-    ...                  ${chave}                    
-    ...                  ${empty}
-
-    # Criando novo supplier
-    POST API    ${supplier_users_api}/buyers
-    ...         ${headers}                      
-    ...         ${return_buyers_payload}
-    ...         400
-
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][${chave}]    ${events}[${chave}]
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]

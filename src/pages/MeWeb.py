@@ -176,12 +176,11 @@ def factory_po_meweb(target):
                 # botões
                 'btn_mapa_comparativo': 'css=iframe >>> button >> text=Novo Mapa Comparativo',
                 'btn_ocultar_forn': 'css=iframe >>> id=slasheye',
+                'btn_exibir_forn': 'css=iframe >>> id=eye',
 
                 # tabelas
                 'tbl_resposta_cotacao': 'css=iframe >>> tbody[id=tTlShowCotacaoBody]',
 
-                # tooltips
-                'tooltip_ocultar_forn': 'css=div[class=ui-tooltip-content]'
             },
 
             # página /MudaSenha.asp

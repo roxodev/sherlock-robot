@@ -97,12 +97,9 @@ Visualizar resposta de cotação no mapa comparativo
 Ocultar resposta de cotação
     [Arguments]    ${dados_fornecedor}
 
-    # Validando tooltip do botão ocultar resposta
-    Hover                  ${modal_show_cotacao}[btn_ocultar_forn]${dados_fornecedor}[fornecedor][id]
-    Validar texto igual    ${dados_fornecedor}[msg_tooltip_btn_ocultar]
-
     # Ocultando resposta de cotação pública do mapa comparativo
-    Clicar elemento    ${modal_show_cotacao}[btn_ocultar_forn]${dados_fornecedor}[fornecedor][id]
+    Clicar elemento              ${modal_show_cotacao}[btn_ocultar_forn]${dados_fornecedor}[fornecedor][id]
+    Aguardar elemento visível    ${modal_show_cotacao}[btn_exibir_forn]${dados_fornecedor}[fornecedor][id]
 
 Visualizar resposta de cotação oculta no mapa comparativo
     [Arguments]    ${dados_fornecedor}

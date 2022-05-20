@@ -16,18 +16,30 @@ Success
     ...       get_accesses_success
 
     # Instanciando massa de dados
-    ${get_accesses}    Factory Supplier Users API    get_accesses
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${success}    Factory Supplier Users API    success
 
     # Consultando supplier accessess
-    GET API    ${supplier_users_api}/${get_accesses}[success][uuid]/accesses    
+    GET API    ${supplier_users_api}/d714faaf-af05-4590-86c9-1dbd94a1088f/accesses    
     ...        ${headers}
     ...        200
 
-    # Validando response
-    Should be equal as strings    ${response.json()}    ${get_accesses}[success][response]
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${success}[reason]
+
+    # Convertendo response body para string
+    ${response_body}=    Convert To String    ${response.json()}
+
+    # Criando lista para validação
+    @{meWebUserIds}    Create List
+    ...                3643278
+    ...                4027082
+
+    # Validando response body
+    FOR    ${meWebUserId}    IN    @{meWebUserIds}
+
+    Should contain    ${response_body}    ${meWebUserId}
+
+    END
 
 Unauthorized
     [Tags]    api
@@ -36,19 +48,15 @@ Unauthorized
     ...       get_accesses_unauthorized
 
     # Instanciando massa de dados
-    ${get_accesses}    Factory Supplier Users API    get_accesses
-    ${events}          Factory Supplier Users Api    events
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${unauthorized}    Factory Supplier Users API    unauthorized
 
     # Consultando supplier accessess
-    GET API    ${supplier_users_api}/${get_accesses}[unauthorized][uuid]/accesses    
+    GET API    ${supplier_users_api}/d714faaf-af05-4590-86c9-1dbd94a1088f/accesses    
     ...        ${empty}
     ...        401
 
-    # Validando evento
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
 
 Not found
     [Tags]    api
@@ -57,16 +65,12 @@ Not found
     ...       get_accesses_not_found
 
     # Instanciando massa de dados
-    ${get_accesses}    Factory Supplier Users API    get_accesses
-    ${events}          Factory Supplier Users Api    events
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${not_found}    Factory Supplier Users API    not_found
 
     # Consultando supplier accessess
-    GET API    ${supplier_users_api}/${get_accesses}[not_found][uuid]/accesses    
+    GET API    ${supplier_users_api}/a0144c8d-a0dc-4296-becd-769f458cfa1e/accesses    
     ...        ${headers}
     ...        404
 
-    # Validar mensagem de erro
-    Should be equal as strings    ${response.reason}    ${events}[not_found]
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${not_found}[reason]

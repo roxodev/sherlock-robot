@@ -13,67 +13,58 @@ Success
     [Tags]    api
     ...       segment_api
     ...       get_segment_by_id
-    ...       get_segment_by_id_success
+    ...       get_by_id_success
 
     # Instanciando massa de dados
-    ${get_by_id}    Factory Segment API    get_by_id
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${success}    Factory Segment API    success
 
     # Consultar segmento via id
-    GET API    ${segment_api}/${get_by_id}[success][id]
+    GET API    ${segment_api}/52000000
     ...        ${headers}
     ...        200
 
     # Criando dicionário para validação
-    ${segment}    Set Variable    ${response.json()}    
+    ${segment}    Create dictionary
+    ...           id=52000000
+    ...           name=Aparelhos Domésticos e Suprimentos e Produtos Eletrônicos de Consumo    
 
-    # Removendo chaves desnecessárias
-    Remove from dictionary    ${segment}
-    ...                       children      
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${success}[reason]
 
-    # Validando response
-    Should be equal as strings    ${segment}    ${get_by_id}[success]
+    # Validando response body
+    Should be equal as strings    ${response.json()}[id]      ${segment}[id]
+    Should be equal as strings    ${response.json()}[name]    ${segment}[name]
 
 No Content
     [Tags]    api
     ...       segment_api
     ...       get_segment_by_id
-    ...       get_by_id_no_content
+    ...       get_segment_by_id_no_content
 
     # Instanciando massa de dados
-    ${get_by_id}    Factory Segment API    get_by_id
-    ${events}       Factory Segment API    events
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${no_content}    Factory Segment API    no_content
 
     # Consultar segmento via id
-    GET API    ${segment_api}/${get_by_id}[no_content][id]
+    GET API    ${segment_api}/00000000
     ...        ${headers}
     ...        204
 
     # Validando evento
-    Should be equal as strings    ${response.reason}    ${events}[no_content]
+    Should be equal as strings    ${response.reason}    ${no_content}[reason]
 
 Unauthorized
     [Tags]    api
     ...       segment_api
-    ...       get_by_id
-    ...       get_by_id_unauthorized
+    ...       get_segment_by_id
+    ...       get_segment_by_id_unauthorized
 
     # Instanciando massa de dados
-    ${get_by_id}    Factory Segment API    get_by_id
-    ${events}       Factory Segment API    events
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${unauthorized}    Factory Segment API    unauthorized
 
     # Consultar segmento via id
-    GET API    ${segment_api}/${get_by_id}[unauthorized][id]
+    GET API    ${segment_api}/52000000
     ...        ${empty}
     ...        401
 
     # Validando evento
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]

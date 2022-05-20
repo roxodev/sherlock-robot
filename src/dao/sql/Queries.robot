@@ -8,7 +8,7 @@ Atualizar usuários MEWeb
     # Definindo lista de usuários editados
     @{usuarios}    Create List
     ...            'RENATOSOUZAFAST'
-    ...            'MAXEL22'
+    ...            'VEDANTESLIDER'
     ...            'FDC371AB'
     ...            'B55BDBC2'
 
@@ -24,7 +24,7 @@ Atualizar usuários MEWeb
 
 Atualizar política RFQ
     @{usuarios}    Create List
-    ...            'MAXEL22'
+    ...            'VEDANTESLIDER'
     ...            'FDC371AB'
 
     FOR    ${usuario}    IN    @{usuarios}
@@ -39,8 +39,8 @@ Atualizar política RFQ
 
 Excluir segmentos e abrangência
     @{cnpjs}    Create List
+    ...         '62422654000160'
     ...         '04432208000130'
-    ...         '96404942000104'
     ...         '41723886000189'
     ...         '02559428000102'
 
@@ -56,7 +56,7 @@ Excluir segmentos e abrangência
 
 Incluir segmentos e abrangência
     @{cnpjs}    Create List
-    ...         '96404942000104'
+    ...         '62422654000160'
     ...         '41723886000189'
     ...         '02559428000102'
 

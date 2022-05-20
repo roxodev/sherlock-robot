@@ -16,26 +16,21 @@ Success
     ...       search_with_filter_success
 
     # Instanciando massa de dados
-    ${search_with_filter}    Factory Segment API    search_with_filter
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    ${success}    Factory Segment API    success
 
     # Buscando segmentos
-    GET API    ${segment_api}/search?filter=${search_with_filter}[filter]&pageNumber=${search_with_filter}[page_number]&pageSize=${search_with_filter}[page_size]
+    GET API    ${segment_api}/search?filter=Componentes e Suprimentos de Fabricação&pageNumber=1&pageSize=10
     ...        ${headers}
     ...        200
 
     # Criando dicionário para validação
-    ${segment}    Set Variable    ${response.json()}[items][0]    
+    ${segment}    Create dictionary
+    ...           name=Componentes e Suprimentos de Fabricação
+    ...           id=31000000
 
-    # Removendo chaves desnecessárias
-    Remove from dictionary    ${segment}
-    ...                       allParentIds
-    ...                       hasChild
-
-    # Validando response
-    Should be equal as strings    ${segment}    ${search_with_filter}[success][response]
+    # Validando response body
+    Should be equal as strings    ${response.json()}[items][0][name]    ${segment}[name]
+    Should be equal as strings    ${response.json()}[items][0][id]      ${segment}[id]
 
 Bad request
     [Tags]    api
@@ -43,10 +38,10 @@ Bad request
     ...       search_with_filter
     ...       search_with_filter_bad_request
 
-    [Template]     Bad request
+    [Template]    Bad request
     filter
-    page_size
-    page_number
+    pageSize
+    pageNumber
 
 Unauthorized
     [Tags]    api
@@ -57,9 +52,6 @@ Unauthorized
     # Instanciando massa de dados
     ${search_with_filter}    Factory Segment API    search_with_filter
     ${events}                Factory Segment API    events
-
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
 
     # Buscando segmentos
     GET API    ${segment_api}/search?filter=${search_with_filter}[filter]&pageNumber=${search_with_filter}[page_number]&pageSize=${search_with_filter}[page_size]
@@ -74,43 +66,42 @@ Bad request
     [Arguments]    ${chave}
 
     # Instanciando massa de dados
-    ${search_with_filter}    Factory Segment API    search_with_filter
-    ${events}                Factory Segment API    events
+    ${bad_request}    Factory Segment API    bad_request
 
-    # Definindo header
-    ${headers}    Create Dictionary    Authorization=Bearer ${access_token}
+    # Definindo payload
+    ${search_with_filter_payload}    Create dictionary
+    ...                              filter=Componentes e Suprimentos de Fabricação
+    ...                              pageNumber=1
+    ...                              pageSize=10
 
     IF    '${chave}' == 'filter'
 
-    # Buscando segmentos
-    GET API    ${segment_api}/search?filter=${search_with_filter}[bad_request][filter]&pageNumber=${search_with_filter}[page_number]&pageSize=${search_with_filter}[page_size]
-    ...        ${headers}
-    ...        400
-
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][filter]    ${events}[${chave}]
-
-    ELSE IF    '${chave}' == 'page_number'
-
-    # Buscando segmentos
-    GET API    ${segment_api}/search?filter=${search_with_filter}[bad_request][filter]&pageNumber=${search_with_filter}[bad_request][page_number]&pageSize=${search_with_filter}[page_size]
-    ...        ${headers}
-    ...        400
-
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][pageNumber]    ${events}[${chave}]
+    Set to dictionary    ${search_with_filter_payload}
+    ...                  ${chave}
+    ...                  ac
 
     ELSE
 
+    Set to dictionary    ${search_with_filter_payload}
+    ...                  ${chave}
+    ...                  0
+
+    END
+
     # Buscando segmentos
-    GET API    ${segment_api}/search?filter=${search_with_filter}[filter]&pageNumber=${search_with_filter}[page_number]&pageSize=${search_with_filter}[bad_request][page_size]
+    GET API    ${segment_api}/search?filter=${search_with_filter_payload}[filter]&pageNumber=${search_with_filter_payload}[pageNumber]&pageSize=${search_with_filter_payload}[pageSize]
     ...        ${headers}
     ...        400
 
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][pageSize]    ${events}[${chave}]
+    # Convertendo resposse body para string
+    ${response_body}=    Convert to string    ${response.json()}
 
-    END
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Validando response body
+    Should contain    ${response_body}    ${bad_request}[errors][${chave}]
+
 
 
 

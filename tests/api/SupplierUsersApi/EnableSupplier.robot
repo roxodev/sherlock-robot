@@ -15,24 +15,29 @@ Created
     ...       enable_supplier
     ...       enable_supplier_created
 
-    # Definindo header e payload
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
-    ${create_supplier_payload}    Create Supplier
+    # Instanciando massa de dados
+    ${created}    Factory Supplier Users API    created
+
+    # Definindo payload
+    ${enable_supplier_payload}    Create Supplier
 
     # Criando novo supplier
     POST API    ${supplier_users_api}         
     ...         ${headers}                    
-    ...         ${create_supplier_payload}
+    ...         ${enable_supplier_payload}
     ...         201
 
     # Habilitando supplier
     POST API    ${supplier_users_api}/enable 
     ...         ${headers}                       
-    ...         ${create_supplier_payload}
+    ...         ${enable_supplier_payload}
     ...         201
 
-    # Validando response
-    Should be equal as strings    ${response.json()}    ${create_supplier_payload}
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${created}[reason]
+
+    # Validando response body
+    Should be equal as strings    ${response.json()}    ${enable_supplier_payload}
 
     # Deletando supplier
     DELETE API    ${supplier_users_api}/${response.json()}[identityServerUserId]
@@ -57,46 +62,40 @@ Unauthorized
     ...       enable_supplier_unauthorized
 
     # Instanciando massa de dados
-    ${enable_supplier}    Factory Supplier Users API    enable_supplier
-    ${events}             Factory Supplier Users Api    events
+    ${unauthorized}    Factory Supplier Users Api    unauthorized
 
-    # Definindo header e payload
-    ${create_supplier_payload}    Create Supplier
+    # Definindo payload
+    ${enable_supplier_payload}    Create Supplier
 
     # Habilitando supplier
     POST API    ${supplier_users_api}/enable 
     ...         ${empty}                         
-    ...         ${create_supplier_payload}
+    ...         ${enable_supplier_payload}
     ...         401
 
     # Validando evento
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
 
 *Keywords
 Bad request
     [Arguments]    ${chave}
 
     # Instanciando massa de dados
-    ${enable_supplier}    Factory Supplier Users API    enable_supplier
-    ${events}             Factory Supplier Users Api    events
+    ${bad_request}    Factory Supplier Users Api    bad_request
 
-    # Definindo header e payload
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
-    ${create_supplier_payload}    Create Supplier
-
-
-
-    IF    '${chave}' == 'identityServerUserId'
+    # Definindo payload
+    ${enable_supplier_payload}    Create Supplier
 
     # Populando payload com dados inválidos conforme chave informada
-    Set to dictionary    ${create_supplier_payload}               
+    IF    '${chave}' == 'identityServerUserId'
+
+    Set to dictionary    ${enable_supplier_payload}             
     ...                  ${chave}
-    ...                  ${enable_supplier}[bad_request][uuid]
+    ...                  00000000-0000-0000-0000-000000000000
 
     ELSE
 
-    # Populando payload com dados inválidos conforme chave informada
-    Set to dictionary    ${create_supplier_payload}    
+    Set to dictionary    ${enable_supplier_payload}    
     ...                  ${chave}                      
     ...                  ${empty}
 
@@ -105,10 +104,16 @@ Bad request
     # Habilitando supplier
     POST API    ${supplier_users_api}/enable 
     ...         ${headers}                       
-    ...         ${create_supplier_payload}
+    ...         ${enable_supplier_payload}
     ...         400
 
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][${chave}]    ${events}[${chave}]
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][${chave}]
 
 

@@ -15,8 +15,10 @@ Success
     ...       set_current_user
     ...       set_current_user_success
 
-    # Definindo header e payload
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
+    # Instanciando massa de dados
+    ${success}    Factory Supplier Users API    success
+
+    # Definindo payload
     ${create_supplier_payload}    Create Supplier
 
     # Criando novo supplier
@@ -34,30 +36,22 @@ Success
     ...         ${create_access_payload}
     ...         201
 
-    # Definindo novo payload
-    ${set_current_user_payload}    Set Variable    ${create_access_payload} 
-
     # Definindo usuário atual
     POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/set-current-user
     ...         ${headers}                                                                                 
-    ...         ${set_current_user_payload}
+    ...         ${create_access_payload}
     ...         200
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${success}[reason]
 
     # Consultando usuário
     GET API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
     ...        ${headers}
     ...        200
 
-    # Criando dicionário
-    ${current_user}    Set Variable    ${response.json()}[currentUser]
-
-    # Removendo chaves desnecessárias
-    Remove From Dictionary    ${current_user}
-    ...                       created
-    ...                       createdBy
-
-    # Validando usuário atual
-    Should be equal as strings    ${current_user}    ${set_current_user_payload}
+    # Validando response body
+    Should be equal as strings    ${response.json()}[accessUsers][0][meWebUserId]    ${create_access_payload}[meWebUserId]    
 
     # Deletando supplier
     DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
@@ -82,54 +76,29 @@ Unauthorized
     ...       set_current_user_unauthorized
 
     # Instanciando massa de dados
-    ${events}    Factory Supplier Users Api    events
+    ${unauthorized}    Factory Supplier Users Api    unauthorized
 
-    # Definindo header e payload
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
+    # Definindo novo payload
     ${create_supplier_payload}    Create Supplier
-
-    # Criando novo supplier
-    POST API    ${supplier_users_api}
-    ...         ${headers}                    
-    ...         ${create_supplier_payload}
-    ...         201
-
-    # Definindo novo payload
-    ${create_access_payload}    Create Supplier Access
-
-    # Criando access
-    POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/accesses
-    ...         ${headers}                                                                         
-    ...         ${create_access_payload}
-    ...         201
-
-    # Definindo novo payload
-    ${set_current_user_payload}    Set Variable    ${create_access_payload}
+    ${create_access_payload}      Create Supplier Access
 
     # Defininfo usuário atual
     POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/set-current-user
     ...         ${empty}                                                                                   
-    ...         ${set_current_user_payload}
+    ...         ${create_access_payload}
     ...         401
 
     # Validando usuário atual
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
-
-    # Deletando supplier
-    DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
-    ...           ${headers}                                                                
-    ...           200
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
 
 *Keywords
 Bad request
     [Arguments]    ${chave}
 
     # Instanciando massa de dados
-    ${set_current_user}    Factory Supplier Users API    set_current_user
-    ${events}              Factory Supplier Users Api    events
+    ${bad_request}    Factory Supplier Users API    bad_request
 
-    # Definindo header e payload
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
+    # Definindo payload
     ${create_supplier_payload}    Create Supplier
 
     # Criando novo supplier
@@ -147,58 +116,42 @@ Bad request
     ...         ${create_access_payload}
     ...         201
 
-    # Definindo novo payload
-    ${set_current_user_payload}    Set Variable    ${create_access_payload}
-
+    # Populando payload com dados inválidos conforme chave informada
     IF    '${chave}' == 'invalidMeWebUserId'
 
-    # Populando payload com dados inválidos
-    Set to dictionary    ${set_current_user_payload}                             
+    Set to dictionary    ${create_access_payload}    
     ...                  meWebUserId
-    ...                  ${set_current_user}[bad_request][invalidMeWebUserId]
-
-    # Definindo usuário atual
-    POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/set-current-user
-    ...         ${headers}                                                                                 
-    ...         ${set_current_user_payload}
-    ...         400
-
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][meWebUserId]    ${events}[meWebUserId]    
+    ...                  0
 
     ELSE IF    '${chave}' == 'notAccessMeWebUserId'
 
-    # Populando payload com dados inválidos
-    Set to dictionary    ${create_access_payload}                                  
+    Set to dictionary    ${create_access_payload}    
     ...                  meWebUserId
-    ...                  ${set_current_user}[bad_request][notAccessMeWebUserId]
-
-    # Definindo usuário atual
-    POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/set-current-user
-    ...         ${headers}                                                                                 
-    ...         ${set_current_user_payload}
-    ...         400
-
-    # Validando evento
-    Should be equal as strings    ${response.json()}[title]    ${events}[title]
+    ...                  1234
 
     ELSE
 
-    # Populando payload com dados inválidos
+        # Populando payload com dados inválidos
     Set to dictionary    ${create_access_payload}    
     ...                  ${chave}
     ...                  ${empty}
 
+    END
+
     # Definindo usuário atual
     POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/set-current-user
     ...         ${headers}                                                                                 
-    ...         ${set_current_user_payload}
+    ...         ${create_access_payload}
     ...         400
 
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][${chave}]    ${events}[${chave}]
+    # Convertendo response body para string
+    ${response_body}=    Convert to string    ${response.json()}
 
-    END
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Validando response body
+    Should contain    ${response_body}    ${bad_request}[errors][${chave}]
 
     # Deletando supplier
     DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]

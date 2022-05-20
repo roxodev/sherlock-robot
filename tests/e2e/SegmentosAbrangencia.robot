@@ -140,8 +140,7 @@ Atualizar abrangência
 
 *Keywords
 Submeter informações
-    Clicar elemento                ${comum}[btn_salvar_avancar]
-    Aguardar elemento invisível    ${comum}[load_barra_progresso]
+    Clicar elemento    ${comum}[btn_salvar_avancar]
 
 
 

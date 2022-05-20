@@ -39,8 +39,6 @@ Configurar ambiente MeWeb
     ${supplier_inbox}=               Set Variable    ${PO_MEWEB}[supplier_inbox]
     ${timezone_mvc}=                 Set Variable    ${PO_MEWEB}[timezone_mvc]
 
-
-
     # Disponibilizando configurações meweb
     Set Global Variable    ${base_url}
     Set Global Variable    ${senha}
@@ -76,6 +74,9 @@ Configurar ambiente MeWeb
     Incluir segmentos e abrangência
 
 Iniciar sessão MeWeb
+    # Definindo browser timeout
+    # Set Browser timeout    ${TIMEOUT}
+
     # Intanciando sessão no chromium
     New Browser    chromium
     ...            headless=${headless}

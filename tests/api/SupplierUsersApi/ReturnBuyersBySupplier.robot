@@ -16,11 +16,11 @@ Success
     ...       return_buyers_success
 
     # Instanciando massa de dados
-    ${return_buyers}    Factory Supplier Users API    return_buyers
+    ${success}    Factory Supplier Users API    success
 
-    # Definindo header e payload
-    ${headers}                  Create Dictionary    Authorization=Bearer ${access_token}
-    ${return_buyers_payload}    Set Variable         ${return_buyers}[payload]               
+    # Definindo payload
+    ${return_buyers_payload}    Create dictionary
+    ...                         email=lucas.roxo@me.com.br    
 
     # Consultando buyer associado ao supplier
     POST API    ${supplier_users_api}/buyers
@@ -28,8 +28,23 @@ Success
     ...         ${return_buyers_payload}
     ...         200
 
-    # Validando response
-    Should be equal as strings    ${response.json()}    ${return_buyers}[response]
+    # Convertendo response body para string
+    ${response_body}=    Convert to string    ${response.json()}
+
+    # Criando lista para validação
+    @{buyers}    Create list
+    ...          WF - BRASALPLA
+    ...          Demonstração FAST
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${success}[reason]
+
+    # Validando response body
+    FOR    ${buyer}    IN    @{buyers}    
+
+    Should contain    ${response_body}    ${buyer}
+
+    END
 
 Bad Request
     [Tags]    api
@@ -38,17 +53,11 @@ Bad Request
     ...       return_buyers_bad_request
 
     # Instanciando massa de dados
-    ${return_buyers}    Factory Supplier Users API    return_buyers
-    ${events}           Factory Supplier Users Api    events
+    ${bad_request}    Factory Supplier Users API    bad_request
 
-    # Definindo header e payload
-    ${headers}                  Create Dictionary    Authorization=Bearer ${access_token}
-    ${return_buyers_payload}    Set Variable         ${return_buyers}[payload]
-
-    # Populando payload com valores inválidos
-    Set to dictionary    ${return_buyers_payload}    
-    ...                  email                       
-    ...                  ${empty}
+    # Definindo payload
+    ${return_buyers_payload}    Create dictionary
+    ...                         email=${empty}
 
     # Consultando buyers
     POST API    ${supplier_users_api}/buyers
@@ -56,10 +65,14 @@ Bad Request
     ...         ${return_buyers_payload}
     ...         400
 
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][email]    ${events}[email]
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
 
+    # Convertendo response body para string
+    ${response_body}=    Convert to string    ${response.json()}
 
+    # Validando response body
+    Should contain    ${response_body}    ${bad_request}[errors][email]
 
 Unauthorized
     [Tags]    api
@@ -68,12 +81,11 @@ Unauthorized
     ...       return_buyers_unauthorized
 
     # Instanciando massa de dados
-    ${return_buyers}    Factory Supplier Users API    return_buyers
-    ${events}           Factory Supplier Users Api    events
+    ${unauthorized}    Factory Supplier Users API    unauthorized
 
-    # Definindo header e payload
-    ${headers}                  Create Dictionary    Authorization=Bearer ${access_token}
-    ${return_buyers_payload}    Set Variable         ${return_buyers}[payload]               
+    # Definindo payload
+    ${return_buyers_payload}    Create dictionary
+    ...                         email=lucas.roxo@me.com.br
 
     # Consultando buyer associado ao supplier
     POST API    ${supplier_users_api}/buyers
@@ -82,7 +94,7 @@ Unauthorized
     ...         401
 
     # Validando evento
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
 
 
 

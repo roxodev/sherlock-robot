@@ -15,9 +15,11 @@ Created
     ...       create_supplier
     ...       create_supplier_created
 
-    # Definindo header e payload
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
-    ${create_supplier_payload}    Create Supplier      
+    # Instanciando massa de dados
+    ${created}    Factory Supplier Users API    created
+
+    # Definindo payload
+    ${create_supplier_payload}    Create Supplier    
 
     # Criando novo supplier
     POST API    ${supplier_users_api} 
@@ -25,14 +27,16 @@ Created
     ...         ${create_supplier_payload}
     ...         201
 
-    # Validando supplier criado
-    GET API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
-    ...        ${headers}
-    ...        200
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${created}[reason]
+
+    # Validando response body
+    Should be equal as strings    ${response.json()}[name]     ${create_supplier_payload}[name]
+    Should be equal as strings    ${response.json()}[email]    ${create_supplier_payload}[email]
 
     # Deletando supplier
-    DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
-    ...           ${headers}                                                                
+    DELETE API    ${supplier_users_api}/${response.json()}[identityServerUserId]
+    ...           ${headers}                                                        
     ...           200
 
 Bad request
@@ -53,11 +57,10 @@ Unauthorized
     ...       create_supplier_unauthorized
 
     # Instanciando massa de dados
-    ${events}    Factory Supplier Users Api    events    
+    ${unauthorized}    Factory Supplier Users Api    unauthorized    
 
-    # Definindo header e payload
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
-    ${create_supplier_payload}    Create Supplier      
+    # Definindo payload
+    ${create_supplier_payload}    Create Supplier    
 
     # Criando novo supplier
     POST API    ${supplier_users_api} 
@@ -66,17 +69,16 @@ Unauthorized
     ...         401
 
     # Validar mensagem de erro
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
 
 *Keywords
 Bad request
     [Arguments]    ${chave}
 
     # Instanciando massa de dados
-    ${events}    Factory Supplier Users Api    events
+    ${bad_request}    Factory Supplier Users Api    bad_request
 
-    # Definindo header e payload
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
+    # Definindo payload
     ${create_supplier_payload}    Create Supplier
 
     # Populando payload com dados inválidos conforme chave informada
@@ -90,8 +92,14 @@ Bad request
     ...         ${create_supplier_payload}
     ...         400
 
-    # Validando evento
-    Should be equal as strings    ${response.json()}[errors][${chave}]    ${events}[${chave}]
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][${chave}]
 
 
 

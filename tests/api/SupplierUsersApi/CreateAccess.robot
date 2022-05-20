@@ -15,8 +15,10 @@ Created
     ...       create_access
     ...       create_access_created
 
-    # Definindo header
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
+    # Instanciando massa de dados
+    ${created}    Factory Supplier Users API    created
+
+    # Definindo payload
     ${create_supplier_payload}    Create Supplier      
 
     # Criando novo supplier
@@ -34,18 +36,17 @@ Created
     ...         ${create_access_payload}
     ...         201
 
-    # Validando supplier access criado
-    GET API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/accesses
-    ...        ${headers}
-    ...        200
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${created}[reason]
 
-    # Validando access criado
-    Should be equal as strings    ${response.json()}[0]    ${create_access_payload}
+    # Validando response body
+    Should be equal as strings    ${response.json()}[meWebUserId]    ${create_access_payload}[meWebUserId]
+    Should be equal as strings    ${response.json()}[login]          ${create_access_payload}[login]
 
     # Deletando supplier
-    DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
-    ...           ${headers}                                                                
-    ...           200                                                                       
+    DELETE API    ${supplier_users_api}/${response.json()}[identityServerUserId]
+    ...           ${headers}                                                        
+    ...           200                                                               
 
 Bad request
     [Tags]    api
@@ -65,10 +66,9 @@ Unauthorized
     ...       create_access_unauthorized
 
     # Instanciando massa de dados
-    ${events}    Factory Supplier Users Api    events
+    ${unauthorized}    Factory Supplier Users Api    unauthorized
 
-    # Definindo header
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
+    # Definindo payload
     ${create_supplier_payload}    Create Supplier 
 
     # Criando novo supplier
@@ -86,65 +86,53 @@ Unauthorized
     ...         ${create_access_payload}
     ...         401
 
-    # Validando evento
-    Should be equal as strings    ${response.reason}    ${events}[unauthorized]
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
 
 *Keywords
 Bad request
     [Arguments]    ${chave}
 
     # Instanciando massa de dados
-    ${create_access}    Factory Supplier Users API    create_access
-    ${events}           Factory Supplier Users Api    events
+    ${bad_request}    Factory Supplier Users API    bad_request
 
-    # Definindo header e payload
-    ${headers}                    Create Dictionary    Authorization=Bearer ${access_token}
+    # Definindo payload
     ${create_supplier_payload}    Create Supplier
+    ${create_access_payload}      Create Supplier Access
 
-    # Criando novo supplier
-    POST API    ${supplier_users_api} 
-    ...         ${headers}                    
-    ...         ${create_supplier_payload}
-    ...         201
-
-    # Definindo novo payload
-    ${create_access_payload}    Create Supplier Access
+    # Populando payload com dados inválidos conforme chave informada
 
     IF    '${chave}' == 'identityServerUserId'
 
-    # Habilitando supplier
-    POST API    ${supplier_users_api}/${create_access}[bad_request][uuid]/accesses
-    ...         ${headers}                                                            
-    ...         ${create_access_payload}
-    ...         400
+    Set to dictionary    ${create_supplier_payload}              
+    ...                  ${chave}                                
+    ...                  00000000-0000-0000-0000-000000000000
 
     ELSE IF    '${chave}' == 'meWebUserId'
 
-    # Populando payload com dados inválidos conforme chave informada
-    Set to dictionary    ${create_access_payload}                      
-    ...                  ${chave}                                      
-    ...                  ${create_access}[bad_request][meWebUserId]
-
-    # Habilitando supplier
-    POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/accesses
-    ...         ${headers}                                                                         
-    ...         ${create_access_payload}
-    ...         400
+    Set to dictionary    ${create_access_payload}    
+    ...                  ${chave}                    
+    ...                  0
 
     ELSE
 
-    # Populando payload com dados inválidos conforme chave informada
     Set to dictionary    ${create_access_payload}    
     ...                  ${chave}                    
     ...                  ${empty}
 
+    END
+
     # Habilitando supplier
     POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/accesses
     ...         ${headers}                                                                         
     ...         ${create_access_payload}
     ...         400
 
-    END
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
 
-    # Validando evento
-    Should be equal as strings    ${events}[${chave}]    ${response.json()}[errors][${chave}]
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][${chave}]
