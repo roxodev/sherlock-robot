@@ -9,7 +9,7 @@ def factory_setup_meweb(target):
         'trunk': {
             'base_url': 'https://trunk.me.com.br/Default.asp',
             'senha': {
-                'senha_atual': 'qualidade@123',
+                'senha': 'qualidade@123',
                 'senha_nova': 'Qualidade@1234',
             },
         }

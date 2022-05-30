@@ -8,11 +8,11 @@ def factory_cotacao_publica(target):
         'exibir_resposta': {
             'comprador': {
                 'nome': 'Renato Souza',
-                'login': 'RENATOSOUZAFAST',
+                'usuario': 'RENATOSOUZAFAST',
             },
             'fornecedor': {
                 'nome': 'VEDANTES E ISOLANTES LIDER LTDA',
-                'login': 'VEDANTESLIDER',
+                'usuario': 'VEDANTESLIDER',
             },
             'fornecedores': ['41.723.886/0001-89', '02.559.428/0001-02'],
         },
@@ -20,11 +20,11 @@ def factory_cotacao_publica(target):
         'ocultar_resposta': {
             'comprador': {
                 'nome': 'Renato Souza',
-                'login': 'RENATOSOUZAFAST',
+                'usuario': 'RENATOSOUZAFAST',
             },
             'fornecedor': {
                 'nome': 'VEDANTES E ISOLANTES LIDER LTDA',
-                'login': 'VEDANTESLIDER',
+                'usuario': 'VEDANTESLIDER',
                 'id': '2729'
             },
             'fornecedores': ['41.723.886/0001-89', '02.559.428/0001-02'],

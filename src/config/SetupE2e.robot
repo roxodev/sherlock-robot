@@ -75,7 +75,7 @@ Configurar ambiente MeWeb
 
 Iniciar sessão MeWeb
     # Definindo browser timeout
-    # Set Browser timeout    ${TIMEOUT}
+    Set Browser timeout    15
 
     # Intanciando sessão no chromium
     New Browser    chromium

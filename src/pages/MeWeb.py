@@ -212,8 +212,6 @@ def factory_po_meweb(target):
             },
 
             'supplier_segments': {
-                'url': 'https://trunk.me.com.br/supplier/register/segments',
-
                 # inputs
                 'input_abrangencia': 'css=div[class=vs__dropdown-toggle] i',
 
@@ -223,9 +221,11 @@ def factory_po_meweb(target):
 
                 # botões
                 'btn_excluir_segmento': 'css=li:nth-child(1) i[class="me-icon-s icon-trash"]',
+                'btn_excluir_abrangencia': 'css=span[class="me-icon-l icon-times deselect-button"]',
 
                 # campos
                 'campo_abrangencia': 'div[class=vs__dropdown-toggle]',
+                'campo_alerta_segmento_abrangencia': 'css=div[class="alert alert-dismissible alert-warning"]',
 
                 # modais
                 'modal_excluir_segmento': 'css=div[class=modal-confirm-refuse]'

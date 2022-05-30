@@ -10,46 +10,6 @@ Test Setup       Iniciar sessão MeWeb
 Test Teardown    Capturar evidência
 
 *Test Cases
-Exibir resposta pública no mapa comparativo automaticamente
-    [Tags]    # e2e
-    ...       cotacao_publica
-    ...       exibir_resposta
-
-    # Instanciando massa de dados
-    ${exibir_resposta}    Factory Cotacao Publica    exibir_resposta
-    ${cotacao_livre}      Factory Cotacao            cotacao_livre
-
-    Login MEWeb                                        ${exibir_resposta}[comprador]
-    Criar cotação pública                              ${exibir_resposta}                
-    ...                                                ${cotacao_livre}
-    ...                                                1
-    Logoff MEWeb
-    Login MEWeb                                        ${exibir_resposta}[fornecedor]
-    Responder cotação pública                          ${cotacao_livre}
-    Logoff MEWeb
-    Login MEWeb                                        ${exibir_resposta}[comprador]
-    Visualizar resposta pública no mapa comparativo    ${exibir_resposta}
-
-Ocultar resposta pública do mapa comparativo
-    [Tags]    # e2e
-    ...       cotacao_publica
-    ...       ocultar_resposta
-
-    # Instanciando massa de dados
-    ${ocultar_resposta}    Factory Cotacao Publica    ocultar_resposta
-    ${cotacao_livre}       Factory Cotacao            cotacao_livre
-
-    Login MEWeb                                     ${ocultar_resposta}[comprador]
-    Criar cotação pública                           ${ocultar_resposta}                
-    ...                                             ${cotacao_livre}
-    ...                                             1
-    Logoff MEWeb
-    Login MEWeb                                     ${ocultar_resposta}[fornecedor]
-    Responder cotação pública                       ${cotacao_livre}
-    Logoff MEWeb
-    Login MEWeb                                     ${ocultar_resposta}[comprador]
-    Ocultar resposta pública no mapa comparativo    ${ocultar_resposta}
-
 
 *Keywords
 # Cria cotação livre

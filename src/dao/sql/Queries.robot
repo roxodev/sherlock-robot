@@ -11,6 +11,7 @@ Atualizar usuários MEWeb
     ...            'VEDANTESLIDER'
     ...            'FDC371AB'
     ...            'B55BDBC2'
+    ...            'DATACAD'
 
     FOR    ${usuario}    IN    @{usuarios}
 
