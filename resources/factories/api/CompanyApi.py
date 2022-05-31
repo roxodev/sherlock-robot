@@ -43,6 +43,7 @@ def factory_company_api(target):
             'errors': {
                 'name': 'Name is required.',
                 'corporateName': 'Corporate name is required.',
+                'documentType': 'Document type is invalid.',
                 'documentCode': 'Document code is required.',
                 'street': 'The Street field is required.',
                 'number': 'The Number field is required.',
@@ -52,7 +53,6 @@ def factory_company_api(target):
                 'province': 'The Province field is required.',
                 'complement': 'The Complement field is required.',
                 'postalCode': 'The PostalCode field is required.',
-                'documentType': 'Document type is invalid.'
             }
         },
 

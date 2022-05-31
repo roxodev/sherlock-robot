@@ -53,24 +53,383 @@ Created
     DELETE API    ${company_api}/${response.json()}[id]    
     ...           ${headers}                               
     ...           200
-Bad Request
+
+Name is required
     [Tags]    api
     ...       company_api
     ...       create_company
-    ...       create_company_bad_request
+    ...       create_company_name_required
 
-    [Template]       Bad request
-    name
-    corporateName
-    documentCode
-    street
-    number
-    neighborhood
-    city
-    country
-    province
-    complement
-    postalCode
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${create_company_payload}    
+    ...                  name
+    ...                  ${empty}
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][name]
+
+Corporate name is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_corporate_name_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${create_company_payload}    
+    ...                  corporateName
+    ...                  ${empty}
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][corporateName]
+
+Document code is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_document_code_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${create_company_payload}    
+    ...                  documentCode
+    ...                  ${empty}
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][documentCode]
+
+Document type is invalid
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_document_type_invalid
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${create_company_payload}    
+    ...                  documentType
+    ...                  5
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][documentType]
+
+Street field is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_street_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Removendo chaves do payload
+    Remove from dictionary    ${create_company_payload}[address]    
+    ...                       street
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][street]
+
+
+Number field is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_number_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Removendo chaves do payload
+    Remove from dictionary    ${create_company_payload}[address]    
+    ...                       number
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][number]
+
+Neighborhood field is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_neighborhood_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Removendo chaves do payload
+    Remove from dictionary    ${create_company_payload}[address]    
+    ...                       neighborhood
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][neighborhood]
+
+City field is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_city_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Removendo chaves do payload
+    Remove from dictionary    ${create_company_payload}[address]    
+    ...                       city
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][city]
+
+Country field is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_country_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Removendo chaves do payload
+    Remove from dictionary    ${create_company_payload}[address]    
+    ...                       country
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][country]
+
+Province field is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_province_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Removendo chaves do payload
+    Remove from dictionary    ${create_company_payload}[address]    
+    ...                       province
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][province]
+
+Complement field is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_complement_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Removendo chaves do payload
+    Remove from dictionary    ${create_company_payload}[address]    
+    ...                       complement
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][complement]
+
+Postal code field is required
+    [Tags]    api
+    ...       company_api
+    ...       create_company
+    ...       create_company_postal_code_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company
+
+    # Removendo chaves do payload
+    Remove from dictionary    ${create_company_payload}[address]    
+    ...                       postalCode
+
+    # Criando novo company
+    POST API    ${company_api}
+    ...         ${headers}                   
+    ...         ${create_company_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][postalCode]
 
 Unauthorized
     [Tags]    api
@@ -92,57 +451,6 @@ Unauthorized
 
     # Validando response header
     Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
-
-*Keywords
-Bad request
-    [Arguments]    ${chave}
-
-    # Instanciando massa de dados
-    ${bad_request}    Factory Company API    bad_request
-
-    # Definindo payload
-    ${create_company_payload}    Create Company
-
-    # Criando lista para controle de fluxo
-    ${chaves}    Create List      
-    ...          name
-    ...          corporateName
-    ...          documentCode
-
-    # Criando condição para controle de fluxo
-    ${condicao}=    Run Keyword And Return Status
-    ...             List Should Contain Value        ${chaves}    ${chave}
-
-    IF    ${condicao} == True 
-
-    # Populando payload com dados inválidos
-    Set to dictionary    ${create_company_payload}    
-    ...                  ${chave}
-    ...                  ${empty}
-
-    ELSE
-
-    # Removendo chaves do payload
-    Remove from dictionary    ${create_company_payload}[address]    
-    ...                       ${chave}
-
-    END
-
-    # Criando novo company
-    POST API    ${company_api}
-    ...         ${headers}                   
-    ...         ${create_company_payload}
-    ...         400
-
-    # Validando response header
-    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
-
-    # Convertendo response body para string
-    ${errors}=    Convert To String    ${response.json()}[errors]
-
-    # Validando response body
-    Should contain    ${errors}    ${bad_request}[errors][${chave}]
-
 
 
 

@@ -44,16 +44,101 @@ Created
     ...           ${headers}                                                        
     ...           200
 
-Bad request
+Identity Server User Id is required
     [Tags]    api
     ...       supplier_users_api
     ...       enable_supplier
-    ...       enable_supplier_bad_request
+    ...       enable_supplier_uuid_required
 
-    [Template]              Bad request
-    identityServerUserId
-    name
-    email
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users Api    bad_request
+
+    # Definindo payload
+    ${enable_supplier_payload}    Create Supplier
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${enable_supplier_payload}              
+    ...                  identityServerUserId
+    ...                  00000000-0000-0000-0000-000000000000
+
+    # Habilitando supplier
+    POST API    ${supplier_users_api}/enable 
+    ...         ${headers}                       
+    ...         ${enable_supplier_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][identityServerUserId]
+
+Name is required
+    [Tags]    api
+    ...       supplier_users_api
+    ...       enable_supplier
+    ...       enable_supplier_name_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users Api    bad_request
+
+    # Definindo payload
+    ${enable_supplier_payload}    Create Supplier
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${enable_supplier_payload}    
+    ...                  name
+    ...                  ${empty}
+
+    # Habilitando supplier
+    POST API    ${supplier_users_api}/enable 
+    ...         ${headers}                       
+    ...         ${enable_supplier_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][name]
+
+Email is required
+    [Tags]    api
+    ...       supplier_users_api
+    ...       enable_supplier
+    ...       enable_supplier_email_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users Api    bad_request
+
+    # Definindo payload
+    ${enable_supplier_payload}    Create Supplier
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${enable_supplier_payload}    
+    ...                  email
+    ...                  ${empty}
+
+    # Habilitando supplier
+    POST API    ${supplier_users_api}/enable 
+    ...         ${headers}                       
+    ...         ${enable_supplier_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][email]
 
 Unauthorized
     [Tags]    api
@@ -80,18 +165,12 @@ Unauthorized
 Bad request
     [Arguments]    ${chave}
 
-    # Instanciando massa de dados
-    ${bad_request}    Factory Supplier Users Api    bad_request
 
-    # Definindo payload
-    ${enable_supplier_payload}    Create Supplier
 
     # Populando payload com dados inválidos conforme chave informada
     IF    '${chave}' == 'identityServerUserId'
 
-    Set to dictionary    ${enable_supplier_payload}             
-    ...                  ${chave}
-    ...                  00000000-0000-0000-0000-000000000000
+
 
     ELSE
 
@@ -107,13 +186,6 @@ Bad request
     ...         ${enable_supplier_payload}
     ...         400
 
-    # Validando response header
-    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
 
-    # Convertendo response body para string
-    ${errors}=    Convert To String    ${response.json()}[errors]
-
-    # Validando response body
-    Should contain    ${errors}    ${bad_request}[errors][${chave}]
 
 

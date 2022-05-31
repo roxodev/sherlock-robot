@@ -39,16 +39,69 @@ Created
     ...           ${headers}                                                        
     ...           200
 
-Bad request
+Name is required
     [Tags]    api
     ...       supplier_users_api
     ...       create_supplier
-    ...       create_supplier_bad_request
+    ...       create_supplier_name_required
 
-    # Criando novo supplier com os campos name e email inválidos
-    [Template]    Bad request
-    name          
-    email
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users Api    bad_request
+
+    # Definindo payload
+    ${create_supplier_payload}    Create Supplier
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${create_supplier_payload}    
+    ...                  name                          
+    ...                  ${empty}
+
+    # Criando novo supplier
+    POST API    ${supplier_users_api} 
+    ...         ${headers}                    
+    ...         ${create_supplier_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][name]
+
+Email is required
+    [Tags]    api
+    ...       supplier_users_api
+    ...       create_supplier
+    ...       create_supplier_name_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users Api    bad_request
+
+    # Definindo payload
+    ${create_supplier_payload}    Create Supplier
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${create_supplier_payload}    
+    ...                  email                         
+    ...                  ${empty}
+
+    # Criando novo supplier
+    POST API    ${supplier_users_api} 
+    ...         ${headers}                    
+    ...         ${create_supplier_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][email]
 
 Unauthorized
     [Tags]    api
@@ -75,31 +128,11 @@ Unauthorized
 Bad request
     [Arguments]    ${chave}
 
-    # Instanciando massa de dados
-    ${bad_request}    Factory Supplier Users Api    bad_request
 
-    # Definindo payload
-    ${create_supplier_payload}    Create Supplier
 
-    # Populando payload com dados inválidos conforme chave informada
-    Set to dictionary    ${create_supplier_payload}    
-    ...                  ${chave}                      
-    ...                  ${empty}
 
-    # Criando novo supplier
-    POST API    ${supplier_users_api} 
-    ...         ${headers}                    
-    ...         ${create_supplier_payload}
-    ...         400
 
-    # Validando response header
-    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
 
-    # Convertendo response body para string
-    ${errors}=    Convert To String    ${response.json()}[errors]
-
-    # Validando response body
-    Should contain    ${errors}    ${bad_request}[errors][${chave}]
 
 
 

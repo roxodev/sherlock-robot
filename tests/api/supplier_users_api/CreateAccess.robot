@@ -19,7 +19,7 @@ Created
     ${created}    Factory Supplier Users API    created
 
     # Definindo payload
-    ${create_supplier_payload}    Create Supplier      
+    ${create_supplier_payload}    Create Supplier    
 
     # Criando novo supplier
     POST API    ${supplier_users_api}
@@ -48,16 +48,95 @@ Created
     ...           ${headers}                                                        
     ...           200                                                               
 
-Bad request
+Identity Server User Id is required
     [Tags]    api
     ...       supplier_users_api
     ...       create_access
-    ...       create_access_bad_request
+    ...       create_access_uuid_required
 
-    [Template]              Bad request
-    identityServerUserId
-    meWebUserId
-    login
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users API    bad_request
+
+    # Definindo payload
+    ${create_access_payload}    Create Supplier Access
+
+    POST API    ${supplier_users_api}/00000000-0000-0000-0000-000000000000/accesses
+    ...         ${headers}                                                             
+    ...         ${create_access_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][identityServerUserId]
+
+MeWebUserId is invalid
+    [Tags]    api
+    ...       supplier_users_api
+    ...       create_access
+    ...       create_access_meweb_user_id_invalid
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users API    bad_request
+
+    # Definindo payload
+    ${create_supplier_payload}    Create Supplier
+    ${create_access_payload}      Create Supplier Access
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${create_access_payload}    
+    ...                  meWebUserId                 
+    ...                  0
+
+    POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/accesses
+    ...         ${headers}                                                                         
+    ...         ${create_access_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][meWebUserId]
+
+Login is required
+    [Tags]    api
+    ...       supplier_users_api
+    ...       create_access
+    ...       create_access_login_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users API    bad_request
+
+    # Definindo payload
+    ${create_supplier_payload}    Create Supplier
+    ${create_access_payload}      Create Supplier Access
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${create_access_payload}    
+    ...                  login                       
+    ...                  ${empty}
+
+    POST API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/accesses
+    ...         ${headers}                                                                         
+    ...         ${create_access_payload}
+    ...         400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][login]
 
 Unauthorized
     [Tags]    api
@@ -93,13 +172,6 @@ Unauthorized
 Bad request
     [Arguments]    ${chave}
 
-    # Instanciando massa de dados
-    ${bad_request}    Factory Supplier Users API    bad_request
-
-    # Definindo payload
-    ${create_supplier_payload}    Create Supplier
-    ${create_access_payload}      Create Supplier Access
-
     # Populando payload com dados inválidos conforme chave informada
 
     IF    '${chave}' == 'identityServerUserId'
@@ -128,11 +200,3 @@ Bad request
     ...         ${create_access_payload}
     ...         400
 
-    # Validando response header
-    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
-
-    # Convertendo response body para string
-    ${errors}=    Convert To String    ${response.json()}[errors]
-
-    # Validando response body
-    Should contain    ${errors}    ${bad_request}[errors][${chave}]

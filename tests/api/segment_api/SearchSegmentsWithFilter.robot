@@ -32,16 +32,74 @@ Success
     Should be equal as strings    ${response.json()}[items][0][name]    ${segment}[name]
     Should be equal as strings    ${response.json()}[items][0][id]      ${segment}[id]
 
-Bad request
+Filter must have at least 3 characters
     [Tags]    api
     ...       segment_api
     ...       search_with_filter
-    ...       search_with_filter_bad_request
+    ...       search_with_filter_legth_invalid
 
-    [Template]    Bad request
-    filter
-    pageSize
-    pageNumber
+    # Instanciando massa de dados
+    ${bad_request}    Factory Segment API    bad_request
+
+    # Buscando segmentos
+    GET API    ${segment_api}/search?filter=ac&pageNumber=1&pageSize=20
+    ...        ${headers}
+    ...        400
+
+    # Convertendo resposse body para string
+    ${response_body}=    Convert to string    ${response.json()}
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Validando response body
+    Should contain    ${response_body}    ${bad_request}[errors][filter]
+
+Page size must be greater than 0
+    [Tags]    api
+    ...       segment_api
+    ...       search_with_filter
+    ...       search_with_filter_page_size_invalid
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Segment API    bad_request
+
+    # Buscando segmentos
+    GET API    ${segment_api}/search?filter=Componentes e Suprimentos de Fabricação&pageNumber=1&pageSize=0
+    ...        ${headers}
+    ...        400
+
+    # Convertendo resposse body para string
+    ${response_body}=    Convert to string    ${response.json()}
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Validando response body
+    Should contain    ${response_body}    ${bad_request}[errors][pageSize]
+
+Page number must be greater than 0
+    [Tags]    api
+    ...       segment_api
+    ...       search_with_filter
+    ...       search_with_filter_page_number_invalid
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Segment API    bad_request
+
+    # Buscando segmentos
+    GET API    ${segment_api}/search?filter=Componentes e Suprimentos de Fabricação&pageNumber=0&pageSize=20
+    ...        ${headers}
+    ...        400
+
+    # Convertendo resposse body para string
+    ${response_body}=    Convert to string    ${response.json()}
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Validando response body
+    Should contain    ${response_body}    ${bad_request}[errors][pageNumber]
 
 Unauthorized
     [Tags]    api
@@ -60,46 +118,7 @@ Unauthorized
     # Validando response
     Should be equal as strings    ${response.reason}    ${unauthorized}[reason]
 
-*Keywords
-Bad request
-    [Arguments]    ${chave}
 
-    # Instanciando massa de dados
-    ${bad_request}    Factory Segment API    bad_request
-
-    # Definindo payload
-    ${search_with_filter_payload}    Create dictionary
-    ...                              filter=Componentes e Suprimentos de Fabricação
-    ...                              pageNumber=1
-    ...                              pageSize=10
-
-    IF    '${chave}' == 'filter'
-
-    Set to dictionary    ${search_with_filter_payload}
-    ...                  ${chave}
-    ...                  ac
-
-    ELSE
-
-    Set to dictionary    ${search_with_filter_payload}
-    ...                  ${chave}
-    ...                  0
-
-    END
-
-    # Buscando segmentos
-    GET API    ${segment_api}/search?filter=${search_with_filter_payload}[filter]&pageNumber=${search_with_filter_payload}[pageNumber]&pageSize=${search_with_filter_payload}[pageSize]
-    ...        ${headers}
-    ...        400
-
-    # Convertendo resposse body para string
-    ${response_body}=    Convert to string    ${response.json()}
-
-    # Validando response header
-    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
-
-    # Validando response body
-    Should contain    ${response_body}    ${bad_request}[errors][${chave}]
 
 
 

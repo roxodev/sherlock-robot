@@ -48,15 +48,65 @@ Success
     ...           ${headers}                                                                
     ...           200
 
-Bad request
+Identity Server User Id is required
     [Tags]    api
     ...       supplier_users_api
     ...       update_supplier
-    ...       update_supplier_bad_request
+    ...       update_supplier_uuid_required
 
-    [Template]              Bad Request
-    identityServerUserId
-    name
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users API    bad_request
+
+    # Definindo payload
+    ${update_supplier_payload}    Update Supplier
+
+    # Atualizando supplier
+    PUT API    ${supplier_users_api}/00000000-0000-0000-0000-000000000000
+    ...        ${headers}                                                    
+    ...        ${update_supplier_payload}
+    ...        400
+
+    # Convertendo response body para string
+    ${response_body}=    Convert to string    ${response.json()}
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Validando response body
+    Should contain    ${response_body}    ${bad_request}[errors][identityServerUserId]
+
+Name is required
+    [Tags]    api
+    ...       supplier_users_api
+    ...       update_supplier
+    ...       update_supplier_name_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Supplier Users API    bad_request
+
+    # Definindo payload
+    ${create_supplier_payload}    Create Supplier
+    ${update_supplier_payload}    Update Supplier
+
+    # Populando payload com dados inválidos
+    Set to dictionary    ${update_supplier_payload}
+    ...                  name
+    ...                  ${empty}
+
+    # Atualizando supplier
+    PUT API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
+    ...        ${headers}                                                                
+    ...        ${update_supplier_payload}
+    ...        400
+
+    # Convertendo response body para string
+    ${response_body}=    Convert to string    ${response.json()}
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Validando response body
+    Should contain    ${response_body}    ${bad_request}[errors][name]
 
 Unauthorized
     [Tags]    api
@@ -84,24 +134,10 @@ Unauthorized
 Bad request
     [Arguments]    ${chave}
 
-    # Instanciando massa de dados
-    ${bad_request}    Factory Supplier Users API    bad_request
-
-    # Definindo payload
-    ${create_supplier_payload}    Create Supplier
-    ${update_supplier_payload}    Update Supplier
-
-    IF    '${chave}' == 'identityServerUserId'
-
-    Set to dictionary    ${create_supplier_payload}
-    ...                  ${chave}
-    ...                  00000000-0000-0000-0000-000000000000
 
     ELSE
 
-    Set to dictionary    ${update_supplier_payload}
-    ...                  ${chave}
-    ...                  ${empty}
+
 
     END
 
@@ -111,11 +147,4 @@ Bad request
     ...        ${update_supplier_payload}
     ...        400
 
-    # Convertendo response body para string
-    ${response_body}=    Convert to string    ${response.json()}
 
-    # Validando response header
-    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
-
-    # Validando response body
-    Should contain    ${response_body}    ${bad_request}[errors][${chave}]

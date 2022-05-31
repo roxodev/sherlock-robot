@@ -54,8 +54,7 @@ def factory_supplier_users_api(target):
             'errors': {
                 'identityServerUserId': 'Identity Server User Id is required.',
                 'meWebUserId': 'MeWebUserId is invalid.',
-                'invalidMeWebUserId': 'MeWebUserId is invalid.',
-                'notAccessMeWebUserId': 'Supplier user does not have this access.',
+                'accessNotFound': 'Supplier user does not have this access.',
                 'login': 'Login is required.',
                 'name': 'Name is required.',
                 'email': 'Email is required.',

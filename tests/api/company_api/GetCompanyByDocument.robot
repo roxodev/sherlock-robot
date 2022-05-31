@@ -59,16 +59,68 @@ Success
     DELETE API    ${company_api}/${response.json()}[id]    
     ...           ${headers}                               
     ...           200
-    
-Bad request
+
+Document type is invalid
     [Tags]    api
     ...       company_api
     ...       get_company_by_document
-    ...       get_company_by_document_bad_request
+    ...       get_company_by_document_type_invalid
 
-    [Template]      Bad request
-    documentType
-    documentCode
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company    
+
+    # Populando payload com valores inválidos
+    Set to dictionary    ${create_company_payload}
+    ...                  documentType
+    ...                  ${empty}
+
+    # Consultando company
+    GET API    ${company_api}?documentType=${create_company_payload}[documentType]&documentCode=${create_company_payload}[documentCode]
+    ...        ${headers}                                                                                                                  
+    ...        400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][documentType]
+
+Document code is required
+    [Tags]    api
+    ...       company_api
+    ...       get_company_by_document
+    ...       get_company_by_document_code_required
+
+    # Instanciando massa de dados
+    ${bad_request}    Factory Company API    bad_request
+
+    # Definindo payload
+    ${create_company_payload}    Create Company    
+
+    # Populando payload com valores inválidos
+    Set to dictionary    ${create_company_payload}
+    ...                  documentCode
+    ...                  ${empty}
+
+    # Consultando company
+    GET API    ${company_api}?documentType=${create_company_payload}[documentType]&documentCode=${create_company_payload}[documentCode]
+    ...        ${headers}                                                                                                                  
+    ...        400
+
+    # Validando response header
+    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
+
+    # Convertendo response body para string
+    ${errors}=    Convert To String    ${response.json()}[errors]
+
+    # Validando response body
+    Should contain    ${errors}    ${bad_request}[errors][documentCode]
 
 Not Found
     [Tags]    api
@@ -114,36 +166,7 @@ Unauthorized
 Bad request
     [Arguments]    ${chave}
 
-    # Instanciando massa de dados
-    ${bad_request}    Factory Company API    bad_request
 
-    # Definindo payload
-    ${create_company_payload}    Create Company    
-
-    # Retirando caracteres especiais
-    ${document_code}=    Remove string    ${create_company_payload}[documentCode]
-    ...                  .
-    ...                  /
-    ...                  -
-
-    # Populando payload com valores inválidos
-    Set to dictionary    ${create_company_payload}
-    ...                  ${chave}
-    ...                  ${empty}
-
-    # Consultando company
-    GET API    ${company_api}?documentType=${create_company_payload}[documentType]&documentCode=${create_company_payload}[documentCode]
-    ...        ${headers}                                                                                                                  
-    ...        400
-
-    # Validando response header
-    Should be equal as strings    ${response.reason}    ${bad_request}[reason]
-
-    # Convertendo response body para string
-    ${errors}=    Convert To String    ${response.json()}[errors]
-
-    # Validando response body
-    Should contain    ${errors}    ${bad_request}[errors][${chave}]
 
 
 

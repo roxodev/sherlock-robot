@@ -42,11 +42,11 @@ Success
 
     END
 
-Bad Request
+Email is required
     [Tags]    api
     ...       supplier_users_api
     ...       return_users
-    ...       return_users_bad_request
+    ...       return_users_email_required
 
     # Instanciando massa de dados
     ${bad_request}    Factory Supplier Users API    bad_request
