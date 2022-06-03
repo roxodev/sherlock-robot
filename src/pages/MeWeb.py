@@ -32,6 +32,7 @@ def factory_po_meweb(target):
 
                 # tabelas
                 'tbl_grid_me': 'css=div[class=table-responsive]',
+                'linha_grid_me': 'css = div[class = table-responsive] tbody tr[aria-rowindex = "1"]',
 
                 # toasters
                 'toaster_sucesso': 'css=p[class=message-success]',
@@ -250,13 +251,19 @@ def factory_po_meweb(target):
                 'input_check_fornecedor': 'td div >label[class=custom-control-label]'
             },
 
-            # página /supplier/inbox/transactions/
+            # página /supplier/inbox/
             'supplier_inbox': {
                 'url': 'https://trunk.me.com.br/supplier/inbox',
                 # modais
                 'modal_billing': 'css=div[class="modal-dialog modal-lg"]',
                 'modal_resp_cota_item': 'css=iframe[class=frame-in-modal]',
                 'modal_novidades_segmentos': 'css=div[class=modal-content]',
+
+                # botões
+                'btn_ordenacao': 'css=button[class="btn dropdown-toggle btn-outline-primary btn-sm"]',
+
+                # listas
+                'lista_ordenacao': 'css=ul[class="dropdown-menu show"] li a span'
             },
 
             # página /timezone.mvc
@@ -267,7 +274,8 @@ def factory_po_meweb(target):
                 'modal_timezone': 'id=TimezonePopup',
 
                 # botões
-                'btn_aceitar': 'css=iframe >>> id=btnAcceptTimeZone'
+                'btn_aceitar': 'css=iframe >>> id=btnAcceptTimeZone',
+
             },
         },
 

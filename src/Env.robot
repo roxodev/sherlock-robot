@@ -33,8 +33,10 @@ Resource    ${EXECDIR}/tests/e2e/base/supplier/Segmentos.robot
 Library    ${EXECDIR}/resources/factories/api/CompanyApi.py
 Library    ${EXECDIR}/resources/factories/api/SegmentApi.py
 Library    ${EXECDIR}/resources/factories/api/SupplierUsersApi.py
-Library    ${EXECDIR}/resources/factories/e2e/Cotacao.py
 Library    ${EXECDIR}/resources/factories/e2e/AdicionarAbrangencia.py
 Library    ${EXECDIR}/resources/factories/e2e/AdicionarSegmentos.py
 Library    ${EXECDIR}/resources/factories/e2e/CadastroPrimeiroAcesso.py
 Library    ${EXECDIR}/resources/factories/e2e/ExcluirSegmentos.py
+Library    ${EXECDIR}/resources/factories/e2e/ExibirRespostaPublica.py
+Library    ${EXECDIR}/resources/factories/e2e/OcultarRespostaPublica.py
+Library    ${EXECDIR}/resources/factories/e2e/OrdenarCotacaoPublica.py

@@ -4,13 +4,13 @@ Documentation    Métodos de Cotação Buyer
 *Keywords
 # Criar nova cotação livre
 Criar cotação livre
-    [Arguments]    ${dados_item}
-    ...            ${numero_itens}
-    ...            ${fornecedores}
-    ...            ${parametros_cotacao}
+    [Arguments]    ${numero_itens}
+    ...            ${lista_fornecedores}
+
+    # Instanciando massa de dados
+    ${criar_cotacao_livre}    Criar Cotacao Livre
 
     # Disponibilizando variáveis
-    Set Test Variable    ${dados_item}      
     Set Test Variable    ${numero_itens}
 
     # Criando nova cotação livre
@@ -22,13 +22,13 @@ Criar cotação livre
 
     Exit For Loop If    ${item} > ${numero_itens}
 
-    Preencher campo     ${cotacao_nova_asp}[input_descricao]${item}      ${dados_item}[descricao]
-    Preencher campo     ${cotacao_nova_asp}[input_quantidade]${item}     ${dados_item}[quantidade]
-    Selecionar opção    ${cotacao_nova_asp}[input_unidade]${item}        ${dados_item}[unidade]
-    Selecionar opção    ${cotacao_nova_asp}[input_aplicacao]${item}      ${dados_item}[aplicacao]
-    Preencher campo     ${cotacao_nova_asp}[input_fabricante]${item}     ${dados_item}[fabricante]
-    Preencher campo     ${cotacao_nova_asp}[input_codigo]${item}         ${dados_item}[codigo]
-    Preencher campo     ${cotacao_nova_asp}[input_complemento]${item}    ${dados_item}[complemento]
+    Preencher campo     ${cotacao_nova_asp}[input_descricao]${item}      ${criar_cotacao_livre}[descricao]
+    Preencher campo     ${cotacao_nova_asp}[input_quantidade]${item}     ${criar_cotacao_livre}[quantidade]
+    Selecionar opção    ${cotacao_nova_asp}[input_unidade]${item}        ${criar_cotacao_livre}[unidade]
+    Selecionar opção    ${cotacao_nova_asp}[input_aplicacao]${item}      ${criar_cotacao_livre}[aplicacao]
+    Preencher campo     ${cotacao_nova_asp}[input_fabricante]${item}     ${criar_cotacao_livre}[fabricante]
+    Preencher campo     ${cotacao_nova_asp}[input_codigo]${item}         ${criar_cotacao_livre}[codigo]
+    Preencher campo     ${cotacao_nova_asp}[input_complemento]${item}    ${criar_cotacao_livre}[complemento]
 
     ${item}    Evaluate    ${item} + 1
 
@@ -39,9 +39,9 @@ Criar cotação livre
     Aguardar elemento visível    ${comum}[tbl_grid_me]
 
     # Selecionando fornecedores
-    @{fornecedores}    Set Variable    ${fornecedores}
+    @{lista_fornecedores}    Set Variable    ${lista_fornecedores}
 
-    FOR    ${fornecedor}    IN    @{fornecedores}
+    FOR    ${fornecedor}    IN    @{lista_fornecedores}
 
     Preencher campo              ${header}[input_busca]                        ${fornecedor}
     Clicar elemento              ${header}[btn_busca]
@@ -55,35 +55,40 @@ Criar cotação livre
     Aguardar elemento visível    ${comum}[campo_titulo] >> text=RFQ - PARÂMETROS GERAIS
 
     # Preenchendo parâmetros gerais
-    Preencher campo     ${cotacao_nova_asp}[input_titulo]         ${parametros_cotacao}[titulo]
-    Selecionar opção    ${cotacao_nova_asp}[input_data_limite]    ${parametros_cotacao}[prazo_resposta]
-    Selecionar opção    ${cotacao_nova_asp}[input_cat_cotacao]    ${parametros_cotacao}[categoria_cotacao]
+    Preencher campo     ${cotacao_nova_asp}[input_titulo]         ${criar_cotacao_livre}[titulo]
+    Selecionar opção    ${cotacao_nova_asp}[input_data_limite]    ${criar_cotacao_livre}[prazo_resposta]
+    Selecionar opção    ${cotacao_nova_asp}[input_cat_cotacao]    ${criar_cotacao_livre}[categoria_cotacao]
 
     # Submetendo cotação
     Clicar elemento    ${cotacao_nova_asp}[btn_avancar]
     Clicar elemento    ${cotacao_nova_asp}[btn_finalizar]
 
     # Validando cotação criada
-    ${num_cotacao}=    Get Text    ${comum}[label_codigo_me]
+    ${numero_cotacao}=     Get Text                     ${comum}[label_codigo_me]
+    Validar texto igual    ${comum}[toaster_sucesso]    Cotação nº ${numero_cotacao} enviada com sucesso. 
 
-    Validar texto igual    ${comum}[toaster_sucesso]    Cotação nº ${num_cotacao} enviada com sucesso. 
-    Set Test Variable      ${num_cotacao}
+    # Definindo descrição de item para consulta
+    ${descricao_item}    Set Variable    ${criar_cotacao_livre}[descricao]
+
+    # Disponibilizando variáveis de teste
+    Set Test Variable    ${numero_cotacao}
+    Set Test Variable    ${descricao_item}
 
 Acessar cotação
-    [Arguments]    ${num_cotacao}
+    [Arguments]    ${numero_cotacao}
 
     # Acessar cotação via código me
-    Preencher campo    ${header}[input_busca]    ${num_cotacao}
+    Preencher campo    ${header}[input_busca]    ${numero_cotacao}
     Clicar elemento    ${header}[btn_busca]
-    Clicar link        ${num_cotacao}
+    Clicar link        ${numero_cotacao}
 
-Visualizar resposta de cotação
+Validar resposta de cotação
     [Arguments]    ${dados_fornecedor}
 
     # Validar fornecedor no grid de respostas de cotação
     Validar texto contendo    ${modal_show_cotacao}[tbl_resposta_cotacao]    ${dados_fornecedor}[nome]
 
-Visualizar resposta de cotação no mapa comparativo
+Visualizar resposta de cotação no novo mapa comparativo
     [Arguments]    ${dados_fornecedor}
 
     # Acessar mapa comparativo
@@ -98,10 +103,10 @@ Ocultar resposta de cotação
     [Arguments]    ${dados_fornecedor}
 
     # Ocultando resposta de cotação pública do mapa comparativo
-    Clicar elemento              ${modal_show_cotacao}[btn_ocultar_forn]${dados_fornecedor}[fornecedor][id]
-    Aguardar elemento visível    ${modal_show_cotacao}[btn_exibir_forn]${dados_fornecedor}[fornecedor][id]
+    Clicar elemento              ${modal_show_cotacao}[btn_ocultar_forn]${dados_fornecedor}[id]
+    Aguardar elemento visível    ${modal_show_cotacao}[btn_exibir_forn]${dados_fornecedor}[id]
 
-Visualizar resposta de cotação oculta no mapa comparativo
+Validar resposta de cotação oculta no novo mapa comparativo
     [Arguments]    ${dados_fornecedor}
 
     # Acessar mapa comparativo

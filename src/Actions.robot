@@ -90,6 +90,14 @@ Validar texto igual
     Aguardar elemento visível    ${elemento}
     Get Text                     ${elemento}    equal    ${texto}
 
+# Validar se texto do elemento é igual ao esperado
+Validar texto diferente
+    [Arguments]    ${elemento}
+    ...            ${texto}
+
+    Aguardar elemento visível    ${elemento}
+    Get Text                     ${elemento}    inequal    ${texto}
+
 # Validar se texto do elemento contém o texto esperado
 Validar texto contendo
     [Arguments]    ${elemento}    

@@ -17,7 +17,7 @@ node {
 
     try {
       me.stage('Run Tests') {
-        dockerImage.inside("-u root --name sherlock-${params.env} --shm-size=2g") {
+        dockerImage.inside("-u root --name sherlock-${params.tag}-${params.env} --shm-size=2g") {
           sh "robot -d ./logs -i ${params.tag} -v env:${params.env} -v headless:${params.headless} tests/"
         }
       }

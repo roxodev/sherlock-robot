@@ -17,19 +17,22 @@ Ocultar resposta pública de fornecedor privado no novo mapa comparativo
     ...       ocultar_resposta_publica_novo_mapa
 
     # Instanciando massa de dados
-    ${ocultar_resposta}    Factory Cotacao Publica    ocultar_resposta
-    ${cotacao_livre}       Factory Cotacao            cotacao_livre
+    ${ocultar_resposta_publica_novo_mapa}    Factory Ocultar Resposta Publica    ocultar_resposta_publica_novo_mapa
 
-    Login MEWeb                                     ${ocultar_resposta}[comprador]
-    Criar cotação pública                           ${ocultar_resposta}                
-    ...                                             ${cotacao_livre}
-    ...                                             1
+    Login MEWeb                                                    ${ocultar_resposta_publica_novo_mapa}[dados_comprador]
+    Criar cotação livre                                            1                                                            
+    ...                                                            ${ocultar_resposta_publica_novo_mapa}[lista_fornecedores]    
     Logoff MEWeb
-    Login MEWeb                                     ${ocultar_resposta}[fornecedor]
-    Responder cotação pública                       ${cotacao_livre}
+    Login MEWeb                                                    ${ocultar_resposta_publica_novo_mapa}[dados_fornecedor]
+    Clicar botão                                                   Oportunidades de Negócios
+    Acessar oportunidade de negócio                                 
+    Responder cotação                                              
     Logoff MEWeb
-    Login MEWeb                                     ${ocultar_resposta}[comprador]
-    Ocultar resposta pública no mapa comparativo    ${ocultar_resposta}
+    Login MEWeb                                                    ${ocultar_resposta_publica_novo_mapa}[dados_comprador]
+    Acessar cotação                                                ${numero_cotacao}
+    Validar resposta de cotação                                    ${ocultar_resposta_publica_novo_mapa}[dados_fornecedor]
+    Ocultar resposta de cotação                                    ${ocultar_resposta_publica_novo_mapa}[dados_fornecedor]
+    Validar resposta de cotação oculta no novo mapa comparativo    ${ocultar_resposta_publica_novo_mapa}[dados_fornecedor]
 
 Ocultar resposta pública de fornecedor privado no mapa comparativo default
     [Tags]    # e2e
