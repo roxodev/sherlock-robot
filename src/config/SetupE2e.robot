@@ -19,25 +19,26 @@ Configurar ambiente MeWeb
     ${sql}=    Set Variable    ${SETUP_SQL}[sql]
 
     # Instanciando page objects
-    ${card_perfil}=                  Set Variable    ${PO_MEWEB}[card_perfil]
-    ${comparative_panel}=            Set Variable    ${PO_MEWEB}[comparative_panel]
-    ${comum}=                        Set Variable    ${PO_MEWEB}[comum]                        
-    ${cotacao_nova_asp}=             Set Variable    ${PO_MEWEB}[cotacao_nova_asp]
-    ${default_asp}=                  Set Variable    ${PO_MEWEB}[default_asp]
-    ${header}=                       Set Variable    ${PO_MEWEB}[header]
-    ${home_transactions}=            Set Variable    ${PO_MEWEB}[home_transactions]
-    ${mercado_compras}=              Set Variable    ${PO_MEWEB}[mercado_compras]
-    ${modal_resp_cota_item}=         Set Variable    ${PO_MEWEB}[modal_resp_cota_item]
-    ${modal_novidades_segmentos}=    Set Variable    ${PO_MEWEB}[modal_novidades_segmentos]
-    ${modal_show_cotacao}=           Set Variable    ${PO_MEWEB}[modal_show_cotacao]
-    ${muda_senha_asp}=               Set Variable    ${PO_MEWEB}[muda_senha_asp]
-    ${supplier_info}=                Set Variable    ${PO_MEWEB}[supplier_info]
-    ${supplier_register}=            Set Variable    ${PO_MEWEB}[supplier_register]
-    ${supplier_segments}=            Set Variable    ${PO_MEWEB}[supplier_segments]
-    ${supplier_segments_add}=        Set Variable    ${PO_MEWEB}[supplier_segments_add]
-    ${supplier_search}=              Set Variable    ${PO_MEWEB}[supplier_search]
-    ${supplier_inbox}=               Set Variable    ${PO_MEWEB}[supplier_inbox]
-    ${timezone_mvc}=                 Set Variable    ${PO_MEWEB}[timezone_mvc]
+    ${card_perfil}=                       Set Variable    ${PO_MEWEB}[card_perfil]
+    ${comparative_panel}=                 Set Variable    ${PO_MEWEB}[comparative_panel]
+    ${comum}=                             Set Variable    ${PO_MEWEB}[comum]                             
+    ${cotacao_nova_asp}=                  Set Variable    ${PO_MEWEB}[cotacao_nova_asp]
+    ${default_asp}=                       Set Variable    ${PO_MEWEB}[default_asp]
+    ${header}=                            Set Variable    ${PO_MEWEB}[header]
+    ${home_transactions}=                 Set Variable    ${PO_MEWEB}[home_transactions]
+    ${mercado_compras}=                   Set Variable    ${PO_MEWEB}[mercado_compras]
+    ${modal_mapa_comparativo_default}=    Set Variable    ${PO_MEWEB}[modal_mapa_comparativo_default]
+    ${modal_resp_cota_item}=              Set Variable    ${PO_MEWEB}[modal_resp_cota_item]
+    ${modal_novidades_segmentos}=         Set Variable    ${PO_MEWEB}[modal_novidades_segmentos]
+    ${modal_show_cotacao}=                Set Variable    ${PO_MEWEB}[modal_show_cotacao]
+    ${muda_senha_asp}=                    Set Variable    ${PO_MEWEB}[muda_senha_asp]
+    ${supplier_info}=                     Set Variable    ${PO_MEWEB}[supplier_info]
+    ${supplier_register}=                 Set Variable    ${PO_MEWEB}[supplier_register]
+    ${supplier_segments}=                 Set Variable    ${PO_MEWEB}[supplier_segments]
+    ${supplier_segments_add}=             Set Variable    ${PO_MEWEB}[supplier_segments_add]
+    ${supplier_search}=                   Set Variable    ${PO_MEWEB}[supplier_search]
+    ${supplier_inbox}=                    Set Variable    ${PO_MEWEB}[supplier_inbox]
+    ${timezone_mvc}=                      Set Variable    ${PO_MEWEB}[timezone_mvc]
 
     # Disponibilizando configurações meweb
     Set Global Variable    ${base_url}
@@ -55,6 +56,7 @@ Configurar ambiente MeWeb
     Set Global Variable    ${header}
     Set Global Variable    ${home_transactions}
     Set Global Variable    ${mercado_compras}
+    Set Global Variable    ${modal_mapa_comparativo_default}
     Set Global Variable    ${modal_resp_cota_item}
     Set Global Variable    ${modal_novidades_segmentos}
     Set Global Variable    ${modal_show_cotacao}
@@ -75,7 +77,7 @@ Configurar ambiente MeWeb
 
 Iniciar sessão MeWeb
     # Definindo browser timeout
-    Set Browser timeout    15
+    Set Browser timeout    20
 
     # Intanciando sessão no chromium
     New Browser    chromium

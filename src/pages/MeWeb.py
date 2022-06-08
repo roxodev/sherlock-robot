@@ -15,7 +15,8 @@ def factory_po_meweb(target):
                 'campo_nome_usuario': 'css=div[class="user-name"]',
 
                 # links
-                'link_idiomas': 'css=div[class=me-accordion-list] a i'
+                'link_lista_idiomas': 'css=div[class=me-accordion-list] > a',
+                'link_pt_br': ' css=div[class="me-accordion-list opened"] ul li:nth-child(1) a'
             },
 
             # página /comparative-panel
@@ -125,6 +126,11 @@ def factory_po_meweb(target):
                 'btn_habilita_nova_home': '#chkHabilitaHome'
             },
 
+            # página /MapaComparativoDefault.asp
+            'modal_mapa_comparativo_default': {
+                'tbl_mapa_comparativo': 'css=iframe >>> table[class=tabelaMC]'
+            },
+
             # modal página /RespCotaItem
             'modal_resp_cota_item': {
                 # banners
@@ -175,7 +181,8 @@ def factory_po_meweb(target):
             # modal página /showcotacao
             'modal_show_cotacao': {
                 # botões
-                'btn_mapa_comparativo': 'css=iframe >>> button >> text=Novo Mapa Comparativo',
+                'btn_novo_mapa_comparativo': 'css=iframe >>> button >> text=Novo Mapa Comparativo',
+                'btn_mapa_comparativo_default': 'css=iframe >>> button >> text=Ver Mapa Comparativo',
                 'btn_ocultar_forn': 'css=iframe >>> id=slasheye',
                 'btn_exibir_forn': 'css=iframe >>> id=eye',
 

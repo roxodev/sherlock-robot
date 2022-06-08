@@ -1,7 +1,7 @@
 def factory_ocultar_resposta_publica(target):
 
     data = {
-        'ocultar_resposta_publica_novo_mapa': {
+        'ocultar_resposta_publica_mapa_comparativo': {
             'dados_comprador': {
                 'nome': 'Renato Souza',
                 'usuario': 'RENATOSOUZAFAST',

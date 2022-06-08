@@ -1,7 +1,7 @@
 def factory_exibir_resposta_publica(target):
 
     data = {
-        'exibir_resposta_novo_mapa': {
+        'exibir_resposta_publica_mapa_comparativo': {
             'dados_comprador': {
                 'nome': 'Renato Souza',
                 'usuario': 'RENATOSOUZAFAST',

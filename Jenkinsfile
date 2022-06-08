@@ -19,16 +19,23 @@ node {
       me.stage('Run Tests') {
         dockerImage.inside("-u root --name sherlock-${params.tag}-${params.env} --shm-size=2g") {
           sh "robot -d ./logs -i ${params.tag} -v env:${params.env} -v headless:${params.headless} tests/"
-        }
-      }
-    } finally {
-      me.stage('Create Report') {
-        robot archiveDirName: 'robot-plugin', enableCache: false, logFileName: '**/logs/log.html', otherFiles: '**/logs/**/*.png', outputFileName: '**/logs/output.xml', outputPath: '', overwriteXAxisLabel: '', reportFileName: '**/logs/report.html'
-      }
+        } 
+      } 
 
-      me.stage('Destroy Environment') {
-        sh "rm -rf **/logs"
+    } catch (FAIL) {
+        dockerImage.inside("-u root --name sherlock-${params.tag}-${params.env} --shm-size=2g") {
+          sh "robot -d ./logs -v env:${params.env} -v headless:${params.headless} --rerunfailed ./logs/output.xml --output ./rerun.xml  tests/ || rebot -d ./logs --merge ./logs/output.xml ./logs/rerun.xml"
+        }
+
+      } finally {
+        me.stage('Create Report') {
+          robot archiveDirName: 'robot-plugin', enableCache: false, logFileName: '**/logs/log.html', otherFiles: '**/logs/**/*.png', outputFileName: '**/logs/output.xml', outputPath: '', overwriteXAxisLabel: '', reportFileName: '**/logs/report.html'
+        }
+
+        me.stage('Destroy Environment') {
+          sh "rm -rf **/logs"
+        }
+
       }
-    }
   }
 }

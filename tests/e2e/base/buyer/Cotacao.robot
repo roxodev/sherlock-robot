@@ -92,12 +92,22 @@ Visualizar resposta de cotação no novo mapa comparativo
     [Arguments]    ${dados_fornecedor}
 
     # Acessar mapa comparativo
-    Clicar elemento              ${modal_show_cotacao}[btn_mapa_comparativo]
+    Clicar elemento              ${modal_show_cotacao}[btn_novo_mapa_comparativo]
     Trocar aba ativa
     Aguardar elemento visível    ${comparative_panel}[tbl_mapa_comparativo]
 
     # Validar fornecedor no mapa comparativo
-    Validar texto contendo    ${comparative_panel}[tbl_mapa_comparativo]    ${dados_fornecedor}[nome]    
+    Validar texto contendo    ${comparative_panel}[tbl_mapa_comparativo]    ${dados_fornecedor}[nome]
+
+Visualizar resposta de cotação mapa comparativo default
+    [Arguments]    ${dados_fornecedor}
+
+    # Acessar mapa comparativo
+    Clicar elemento              ${modal_show_cotacao}[btn_mapa_comparativo_default]
+    Aguardar elemento visível    ${modal_mapa_comparativo_default}[tbl_mapa_comparativo]
+
+    # Validar fornecedor no mapa comparativo
+    Validar texto contendo    ${modal_mapa_comparativo_default}[tbl_mapa_comparativo]    ${dados_fornecedor}[nome]    
 
 Ocultar resposta de cotação
     [Arguments]    ${dados_fornecedor}
@@ -110,11 +120,21 @@ Validar resposta de cotação oculta no novo mapa comparativo
     [Arguments]    ${dados_fornecedor}
 
     # Acessar mapa comparativo
-    Clicar elemento              ${modal_show_cotacao}[btn_mapa_comparativo]
+    Clicar elemento              ${modal_show_cotacao}[btn_novo_mapa_comparativo]
     Trocar aba ativa
     Aguardar elemento visível    ${comparative_panel}[tbl_mapa_comparativo]
 
     # Validar fornecedor oculto no mapa comparativo
     Validar texto não contendo    ${comparative_panel}[tbl_mapa_comparativo]    ${dados_fornecedor}[nome]
+
+Validar resposta de cotação oculta mapa comparativo default
+    [Arguments]    ${dados_fornecedor}
+
+    # Acessar mapa comparativo
+    Clicar elemento              ${modal_show_cotacao}[btn_mapa_comparativo_default]
+    Aguardar elemento visível    ${modal_mapa_comparativo_default}[tbl_mapa_comparativo]
+
+    # Validar fornecedor oculto no mapa comparativo
+    Validar texto não contendo    ${modal_mapa_comparativo_default}[tbl_mapa_comparativo]    ${dados_fornecedor}[nome]
 
 

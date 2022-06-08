@@ -75,8 +75,23 @@ Login MEWeb
 
     # Validando login
     Clicar elemento        ${card_perfil}[btn_abrir_card_perfil]
-    Validar texto igual    ${card_perfil}[campo_nome_usuario]        ${dados_login}[nome]
-    Clicar elemento        ${card_perfil}[btn_fechar_card_perfil]
+    Validar texto igual    ${card_perfil}[campo_nome_usuario]       ${dados_login}[nome]
+
+    # Validando idioma
+    ${condicao}=    Run Keyword And Return Status
+    ...             Get Text                         
+    ...             ${header}[card_perfil]           contains    Português BR
+
+    IF    ${condicao} == False
+
+    Clicar elemento    ${card_perfil}[link_lista_idiomas]
+    Clicar elemento    ${card_perfil}[link_pt_br]
+
+    ELSE
+
+    Clicar elemento    ${card_perfil}[btn_fechar_card_perfil]
+
+    END
 
 # Realiza logoff de usuários
 Logoff MEWeb

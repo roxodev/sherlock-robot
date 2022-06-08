@@ -6,7 +6,7 @@ Documentation    Ações Gerais
 Aguardar elemento visível
     [Arguments]    ${elemento}
 
-    Wait For Elements State    ${elemento}    visible    5
+    Wait For Elements State    ${elemento}    visible    15
 
 # Clicar elemento
 Clicar elemento
