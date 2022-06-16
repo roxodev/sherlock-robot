@@ -32,8 +32,8 @@ def factory_po_meweb(target):
                 'label_codigo_me': 'css=p[class="badge-code "]',
 
                 # tabelas
-                'tbl_grid_me': 'css=div[class=table-responsive]',
-                'linha_grid_me': 'css = div[class = table-responsive] tbody tr[aria-rowindex = "1"]',
+                'tbl_grid_me': 'css=div[class*=table-responsive]',
+                'linha_grid_me': 'css = div[class*=table-responsive] tbody tr[aria-rowindex = "1"]',
 
                 # toasters
                 'toaster_sucesso': 'css=p[class=message-success]',

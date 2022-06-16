@@ -14,27 +14,33 @@ node {
     me.stage('Build Environment') {
       dockerImage = docker.build(imageName, '-f ./Dockerfile .')
     }
-
-    me.stage('Run Tests') {
-      dockerImage.inside("-u root --name sherlock-${params.tag}-${params.env} --shm-size=2g") {
+    
+    dockerImage.inside("-u root --name sherlock-${params.tag}-${params.env} --shm-size=2g") {
         
-        try {
-          sh "robot -d ./logs -i ${params.tag} -v env:${params.env} -v headless:${params.headless} tests/"
-        
-        } catch (FAIL) {
-          sh "robot -d ./logs/retry -v env:${params.env} -v headless:${params.headless} --rerunfailed ./logs/output.xml --output output.xml  tests/ || rebot -d ./logs --merge ./logs/output.xml ./logs/retry/output.xml"
-          sh "find src -name '*.png' -exec cp ./logs/browser/screenshot/"
-
-          } finally {
-            me.stage('Create Report') {
-            robot archiveDirName: 'robot-plugin', enableCache: false, logFileName: '**/logs/log.html', otherFiles: '**/logs/**/*.png', outputFileName: '**/logs/output.xml', outputPath: '', overwriteXAxisLabel: '', reportFileName: '**/logs/report.html'
-          }
-
-            me.stage('Destroy Environment') {
-            sh "rm -rf **/logs"
-          }
+      try {
+        me.stage('Run Tests') {
+          sh "robot -d ./logs -i ${params.tag} -v env:${params.env} -v headless:${params.headless} tests/ || robot -d ./logs/retry -v env:${params.env} -v headless:${params.headless} --rerunfailed ./logs/output.xml --output output.xml tests/ || rebot -d ./logs --merge ./logs/output.xml ./logs/retry/output.xml"    
         }
-      } 
+
+      } finally {
+        me.stage('Create Report') {
+          if (fileExists('./logs/retry/browser')) {
+            sh "cp \$(find ./logs/retry/browser -type f -name '*.png') ./logs/browser/screenshot"
+          }
+
+          robot archiveDirName: 'robot-plugin', enableCache: false, logFileName: '**/logs/log.html', otherFiles: '**/logs/**/*.png', outputFileName: '**/logs/output.xml', outputPath: '', overwriteXAxisLabel: '', reportFileName: '**/logs/report.html'
+        }
+
+        me.stage('Destroy Environment') {
+          sh "rm -rf **/logs"
+          cleanWs()     
+        }
+      }
     }
   }
 }
+
+
+
+
+

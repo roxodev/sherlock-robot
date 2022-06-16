@@ -35,7 +35,7 @@ Exibir resposta pública de fornecedor privado no novo mapa comparativo
     Visualizar resposta de cotação no novo mapa comparativo    ${exibir_resposta_novo_mapa}[dados_fornecedor]      
 
 Exibir resposta pública de fornecedor privado no mapa comparativo default
-    [Tags]    # e2e
+    [Tags]    e2e
     ...       cotacao_publica
     ...       exibir_resposta_publica
     ...       exibir_resposta_publica_mapa_default
