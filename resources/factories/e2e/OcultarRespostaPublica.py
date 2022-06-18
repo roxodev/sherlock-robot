@@ -11,7 +11,7 @@ def factory_ocultar_resposta_publica(target):
                 'usuario': 'VEDANTESLIDER',
                 'id': '2729'
             },
-            'lista_fornecedores': ['41.723.886/0001-89', '02.559.428/0001-02'],
+            'lista_fornecedores': ['44.144.293/0001-56', '02.559.428/0001-02'],
         },
     }
 

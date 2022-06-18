@@ -273,10 +273,18 @@ def factory_po_meweb(target):
                 'lista_ordenacao': 'css=ul[class="dropdown-menu show"] li a span'
             },
 
+            # página /do/SupplierSSO.mvc/auth
+            'supplier_sso_auth': {
+                # inputs
+                'input_email': 'id=username',
+                'input_senha': 'id=password',
+
+                # botões
+                'btn_login': 'id=kc-login'
+            },
+
             # página /timezone.mvc
             'timezone_mvc': {
-                'url': 'https://trunk.me.com.br/DO/Timezone.mvc/DefineTimeZoneBase',
-
                 # modais
                 'modal_timezone': 'id=TimezonePopup',
 

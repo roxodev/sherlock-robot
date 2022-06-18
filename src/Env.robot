@@ -36,6 +36,7 @@ Library    ${EXECDIR}/resources/factories/api/SupplierUsersApi.py
 Library    ${EXECDIR}/resources/factories/e2e/AdicionarAbrangencia.py
 Library    ${EXECDIR}/resources/factories/e2e/AdicionarSegmentos.py
 Library    ${EXECDIR}/resources/factories/e2e/CadastroPrimeiroAcesso.py
+Library    ${EXECDIR}/resources/factories/e2e/DesvincularAcessos.py
 Library    ${EXECDIR}/resources/factories/e2e/ExcluirSegmentos.py
 Library    ${EXECDIR}/resources/factories/e2e/ExibirRespostaPublica.py
 Library    ${EXECDIR}/resources/factories/e2e/OcultarRespostaPublica.py

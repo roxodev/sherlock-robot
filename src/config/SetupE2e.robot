@@ -12,8 +12,9 @@ Configurar ambiente MeWeb
     ${SETUP_SQL}      Factory Setup SQL      ${env}
 
     # Instanciando configurações meweb
-    ${base_url}=    Set Variable    ${SETUP_MEWEB}[base_url]
-    ${senha}=       Set Variable    ${SETUP_MEWEB}[senha]
+    ${base_url_keycloak}=    Set Variable    ${SETUP_MEWEB}[base_url_keycloak]
+    ${base_url_meweb}=       Set Variable    ${SETUP_MEWEB}[base_url_meweb]
+    ${senha_meweb}=          Set Variable    ${SETUP_MEWEB}[senha_meweb]
 
     # Instanciando configurações sql
     ${sql}=    Set Variable    ${SETUP_SQL}[sql]
@@ -38,11 +39,13 @@ Configurar ambiente MeWeb
     ${supplier_segments_add}=             Set Variable    ${PO_MEWEB}[supplier_segments_add]
     ${supplier_search}=                   Set Variable    ${PO_MEWEB}[supplier_search]
     ${supplier_inbox}=                    Set Variable    ${PO_MEWEB}[supplier_inbox]
+    ${supplier_sso_auth}=                 Set Variable    ${PO_MEWEB}[supplier_sso_auth]
     ${timezone_mvc}=                      Set Variable    ${PO_MEWEB}[timezone_mvc]
 
     # Disponibilizando configurações meweb
-    Set Global Variable    ${base_url}
-    Set Global Variable    ${senha}
+    Set Global Variable    ${base_url_keycloak}
+    Set Global Variable    ${base_url_meweb}
+    Set Global Variable    ${senha_meweb}
 
     # Disponibilizando configurações sql
     Set Global Variable    ${sql}
@@ -67,6 +70,7 @@ Configurar ambiente MeWeb
     Set Global Variable    ${supplier_segments_add}
     Set Global Variable    ${supplier_search}
     Set Global Variable    ${supplier_inbox}
+    Set Global Variable    ${supplier_sso_auth}
     Set Global Variable    ${timezone_mvc}
 
     # Executando queries de configuração de ambiente
@@ -85,7 +89,21 @@ Iniciar sessão MeWeb
     ...            slowMo=00:00:00.5
 
     # Abrindo página inicial
-    New Page             ${base_url}
+    New Page             ${base_url_meweb}
+    Set Viewport Size    1280
+    ...                  720
+
+Iniciar sessão Keycloak
+    # Definindo browser timeout
+    Set Browser timeout    20
+
+    # Intanciando sessão no chromium
+    New Browser    chromium
+    ...            headless=${headless}
+    ...            slowMo=00:00:00.5
+
+    # Abrindo página inicial
+    New Page             ${base_url_keycloak}
     Set Viewport Size    1280
     ...                  720
 

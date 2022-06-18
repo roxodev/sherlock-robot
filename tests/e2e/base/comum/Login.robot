@@ -7,12 +7,11 @@ Login MEWeb
     [Arguments]    ${dados_login}
 
     # Acessando página de login
-    Go To          ${base_url}
-    Validar url    ${default_asp}[url]
+    Go To    ${base_url_meweb}
 
     # Preenchendo credenciais
     Preencher campo    ${default_asp}[input_login]    ${dados_login}[usuario]
-    Preencher campo    ${default_asp}[input_senha]    ${senha}[senha]
+    Preencher campo    ${default_asp}[input_senha]    ${senha_meweb}[senha]
 
     # Submetendo credenciais
     Clicar elemento    ${default_asp}[btn_login]
@@ -23,9 +22,9 @@ Login MEWeb
 
     IF    ${condicao} == True
 
-    Preencher campo    ${muda_senha_asp}[input_senha_antiga]           ${senha}[senha]
-    Preencher campo    ${muda_senha_asp}[input_senha_nova]             ${senha}[senha_nova]
-    Preencher campo    ${muda_senha_asp}[input_confirma_senha_nova]    ${senha}[senha_nova]
+    Preencher campo    ${muda_senha_asp}[input_senha_antiga]           ${senha_meweb}[senha]
+    Preencher campo    ${muda_senha_asp}[input_senha_nova]             ${senha_meweb}[senha_nova]
+    Preencher campo    ${muda_senha_asp}[input_confirma_senha_nova]    ${senha_meweb}[senha_nova]
     Clicar link        Alterar
 
     END
@@ -93,8 +92,47 @@ Login MEWeb
 
     END
 
+Login Keycloak
+    [Arguments]    ${dados_login}
+
+    # Acessando página de login
+    Go To    ${base_url_keycloak}
+
+    # Preenchendo credenciais
+    Preencher campo    ${supplier_sso_auth}[input_email]    ${dados_login}[usuario]
+    Preencher campo    ${supplier_sso_auth}[input_senha]    ${dados_login}[senha]
+
+    # Submetendo credenciais
+    Clicar elemento    ${supplier_sso_auth}[btn_login]
+
+    # Fechando billing modal
+    ${condicao}=    Run Keyword And Return Status
+    ...             Aguardar elemento visível        ${supplier_inbox}[modal_billing]
+
+    IF    ${condicao} == True
+
+    Clicar botão    Ver Depois
+    Clicar botão    Ok, entendi
+
+    END
+
+    # Fechando modal novidades segmentos
+    ${condicao}=    Run Keyword And Return Status
+    ...             Aguardar elemento visível        ${supplier_inbox}[modal_novidades_segmentos]
+
+    IF    ${condicao} == True
+
+    Clicar elemento via js    ${modal_novidades_segmentos}[check_nao_mostar_novamente]
+    Clicar botão              Ver depois
+
+    END
+
+    # Validando login
+    # Clicar elemento        ${card_perfil}[btn_abrir_card_perfil]
+    # Validar texto igual    ${card_perfil}[campo_nome_usuario]       ${dados_login}[nome]
+
 # Realiza logoff de usuários
 Logoff MEWeb
-    Go To              ${base_url}
+    Go To              ${base_url_meweb}
     Clicar elemento    ${card_perfil}[btn_abrir_card_perfil]
     Clicar link        Logoff
