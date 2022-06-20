@@ -5,7 +5,7 @@ Documentation    Delete company
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup
-Suite Setup    Configurar ambiente API
+Suite Setup    Configurar ambiente
 Test Setup     Capturar access token keycloak
 
 *Test Cases
@@ -19,7 +19,7 @@ Success
     ${success}    Factory Company API    success
 
     # Definindo payload
-    ${create_company_payload}    Create Company       
+    ${create_company_payload}    Create Company    
 
     # Criando novo company
     POST API    ${company_api}
@@ -30,6 +30,7 @@ Success
     # Deletando company criado
     DELETE API    ${company_api}/${response.json()}[id]    
     ...           ${headers}                               
+    ...           ${empty}                                 
     ...           200
 
     # Validando response header
@@ -46,7 +47,8 @@ Not found
 
     # Deletando company criado
     DELETE API    ${company_api}/c38e92fa-1b1f-4126-9f31-1b88746aa7e7    
-    ...           ${headers}                                             
+    ...           ${headers} 
+    ...           ${empty}                                               
     ...           404
 
     # Validando response header
@@ -63,6 +65,7 @@ Unauthorized
 
     # Deletando company criado
     DELETE API    ${company_api}/c38e92fa-1b1f-4126-9f31-1b88746aa7e7    
+    ...           ${empty} 
     ...           ${empty}                                               
     ...           401
 

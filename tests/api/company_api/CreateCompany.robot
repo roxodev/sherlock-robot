@@ -5,7 +5,7 @@ Documentation    Create company
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup
-Suite Setup    Configurar ambiente API
+Suite Setup    Configurar ambiente
 Test Setup     Capturar access token keycloak
 
 *Test Cases
@@ -51,7 +51,8 @@ Created
 
     # Deletando company criado
     DELETE API    ${company_api}/${response.json()}[id]    
-    ...           ${headers}                               
+    ...           ${headers}
+    ...           ${empty}                                 
     ...           200
 
 Name is required

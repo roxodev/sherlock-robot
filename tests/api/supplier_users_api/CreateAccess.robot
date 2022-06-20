@@ -5,7 +5,7 @@ Documentation    Create a supplier access
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup
-Suite Setup    Configurar ambiente API
+Suite Setup    Configurar ambiente
 Test Setup     Capturar access token keycloak
 
 *Test Cases
@@ -46,6 +46,7 @@ Created
     # Deletando supplier
     DELETE API    ${supplier_users_api}/${response.json()}[identityServerUserId]
     ...           ${headers}                                                        
+    ...           ${empty}                                                          
     ...           200                                                               
 
 Identity Server User Id is required

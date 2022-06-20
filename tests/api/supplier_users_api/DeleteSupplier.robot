@@ -5,7 +5,7 @@ Documentation    Delete a supplier
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup
-Suite Setup    Configurar ambiente API
+Suite Setup    Configurar ambiente
 Test Setup     Capturar access token keycloak
 
 *Test Cases
@@ -30,6 +30,7 @@ Success
     # Deletando supplier
     DELETE API    ${supplier_users_api}/${response.json()}[identityServerUserId]
     ...           ${headers}                                                        
+    ...           ${empty}                                                          
     ...           200
 
     # Validando response header
@@ -46,6 +47,7 @@ Unauthorized
 
     # Deletando supplier
     DELETE API    ${supplier_users_api}/3fa85f64-5717-4562-b3fc-2c963f66afa
+    ...           ${empty}                                                     
     ...           ${empty}                                                     
     ...           401
 
@@ -64,6 +66,7 @@ Not Found
     # Deletando supplier
     DELETE API    ${supplier_users_api}/a0144c8d-a0dc-4296-becd-769f458cfa1e
     ...           ${headers}                                                    
+    ...           ${empty}                                                      
     ...           404
 
     # Validando evento

@@ -5,7 +5,7 @@ Documentation    Delete a supplier access
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup
-Suite Setup    Configurar ambiente API
+Suite Setup    Configurar ambiente
 Test Setup     Capturar access token keycloak
 
 *Test Cases
@@ -39,6 +39,7 @@ Success
     # Deletando supplier access
     DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/accesses/${create_access_payload}[meWebUserId]
     ...           ${headers}                                                                                                               
+    ...           ${empty}                                                                                                                 
     ...           200
 
     # Validando response header
@@ -47,6 +48,7 @@ Success
     # Deletando supplier
     DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
     ...           ${headers}                                                                
+    ...           ${empty}                                                                  
     ...           200
 
 Unauthorized
@@ -79,6 +81,7 @@ Unauthorized
     # Deletando supplier access
     DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/accesses/${create_access_payload}[meWebUserId]
     ...           ${empty}                                                                                                                 
+    ...           ${empty}                                                                                                                 
     ...           401
 
     # Validando response header
@@ -87,6 +90,7 @@ Unauthorized
     # Deletando supplier
     DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
     ...           ${headers}                                                                
+    ...           ${empty}                                                                  
     ...           200
 
 Not Found
@@ -118,6 +122,7 @@ Not Found
     # Deletando supplier access
     DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]/accesses/1234
     ...           ${headers}                                                                              
+    ...           ${empty}                                                                                
     ...           404
 
     # Validando response header
@@ -126,4 +131,5 @@ Not Found
     # Deletando supplier
     DELETE API    ${supplier_users_api}/${create_supplier_payload}[identityServerUserId]
     ...           ${headers}                                                                
+    ...           ${empty}                                                                  
     ...           200

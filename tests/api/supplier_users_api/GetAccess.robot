@@ -5,7 +5,7 @@ Documentation    Get accesses
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup
-Suite Setup    Configurar ambiente API
+Suite Setup    Configurar ambiente
 Test Setup     Capturar access token keycloak
 
 *Test Cases
@@ -31,8 +31,7 @@ Success
 
     # Criando lista para validação
     @{meWebUserIds}    Create List
-    ...                3643278
-    ...                4027082
+    ...                2729
 
     # Validando response body
     FOR    ${meWebUserId}    IN    @{meWebUserIds}

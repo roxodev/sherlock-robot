@@ -5,7 +5,7 @@ Documentation    Search by segments with filter
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup
-Suite Setup    Configurar ambiente API
+Suite Setup    Configurar ambiente
 Test Setup     Capturar access token MeWeb
 
 *Test Cases

@@ -4,6 +4,7 @@ def factory_desvincular_acessos(target):
 
         'desvincular_um_acesso': {
             'login': {
+                'nome': 'VEDANTES E ISOLANTES LIDER', 
                 'usuario': 'lucas.roxo@me.com.br',
                 'senha': '123456abc@'
 

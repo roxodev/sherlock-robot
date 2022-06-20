@@ -128,8 +128,8 @@ Login Keycloak
     END
 
     # Validando login
-    # Clicar elemento        ${card_perfil}[btn_abrir_card_perfil]
-    # Validar texto igual    ${card_perfil}[campo_nome_usuario]       ${dados_login}[nome]
+    Clicar elemento        ${card_perfil}[btn_abrir_card_perfil]
+    Validar texto igual    ${card_perfil}[campo_nome_usuario]       ${dados_login}[nome]
 
 # Realiza logoff de usuários
 Logoff MEWeb

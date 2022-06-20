@@ -5,8 +5,8 @@ Documentation    Adicionar segmentos
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup e teardown
-Suite Setup      Configurar ambiente MeWeb
-Test Setup       Iniciar sessão MeWeb
+Suite Setup      Configurar ambiente
+Test Setup       Iniciar sessão               ${base_url_meweb}
 Test Teardown    Capturar evidência
 
 *Test Cases

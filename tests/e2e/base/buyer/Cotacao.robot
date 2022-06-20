@@ -11,7 +11,7 @@ Criar cotação livre
     ${criar_cotacao_livre}    Criar Cotacao Livre
 
     # Disponibilizando variáveis
-    Set Test Variable    ${numero_itens}
+    Set Global Variable    ${numero_itens}
 
     # Criando nova cotação livre
     Clicar elemento    ${header}[btn_novo]
@@ -71,8 +71,8 @@ Criar cotação livre
     ${descricao_item}    Set Variable    ${criar_cotacao_livre}[descricao]
 
     # Disponibilizando variáveis de teste
-    Set Test Variable    ${numero_cotacao}
-    Set Test Variable    ${descricao_item}
+    Set Global Variable    ${numero_cotacao}
+    Set Global Variable    ${descricao_item}
 
 Acessar cotação
     [Arguments]    ${numero_cotacao}

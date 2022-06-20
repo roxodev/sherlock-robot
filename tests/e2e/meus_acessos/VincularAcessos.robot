@@ -5,8 +5,8 @@ Documentation    Vincular Acessos
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup e teardown
-Suite Setup      Configurar ambiente Meweb
-Test Setup       Iniciar sessão Keycloak
+Suite Setup      Configurar ambiente
+Test Setup       Iniciar sessão               ${base_url_keycloak}
 Test Teardown    Capturar evidência
 
 *Test Cases

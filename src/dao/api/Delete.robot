@@ -8,11 +8,13 @@ Resource    ${EXECDIR}/src/Env.robot
 DELETE API
     [Arguments]    ${endpoint}
     ...            ${headers}
+    ...            ${payload}
     ...            ${response_code}
 
     ${response}    DELETE
     ...            ${endpoint}
     ...            headers=${headers}
+    ...            json=${payload}
     ...            expected_status=${response_code}
 
-    Set Test Variable    ${response}
+    Set Global Variable    ${response}

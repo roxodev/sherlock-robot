@@ -17,4 +17,4 @@ POST API
     ...            json=${payload}
     ...            expected_status=${response_code}
 
-    Set Test Variable    ${response}
+    Set Global Variable    ${response}

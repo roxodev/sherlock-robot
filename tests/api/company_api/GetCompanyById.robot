@@ -5,7 +5,7 @@ Documentation    Get company by id
 Resource    ${EXECDIR}/src/Env.robot
 
 # Setup
-Suite Setup    Configurar ambiente API
+Suite Setup    Configurar ambiente
 Test Setup     Capturar access token keycloak
 
 *Test Cases
@@ -57,7 +57,8 @@ Success
 
     # Deletando company criado
     DELETE API    ${company_api}/${response.json()}[id]    
-    ...           ${headers}                               
+    ...           ${headers} 
+    ...           ${empty}                                 
     ...           200
 
 Bad request
