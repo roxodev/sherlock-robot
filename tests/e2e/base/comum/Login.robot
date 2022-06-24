@@ -105,6 +105,37 @@ Login Keycloak
     # Submetendo credenciais
     Clicar elemento    ${supplier_sso_auth}[btn_login]
 
+    # Associando acessos via primeiro acesso
+    ${condicao}=    Run Keyword And Return Status
+    ...             Aguardar elemento visível        ${supplier_user_first_access}[campo_titulo_controle_de_acesso]
+
+    IF    ${condicao} == True
+
+    Clicar botão    Iniciar
+
+    # Associando acessos via primeiro acesso
+    ${condicao}=    Run Keyword And Return Status
+    ...             Aguardar elemento visível        ${supplier_user_first_access_relation}[campo_alerta_sem_acessos]
+
+    IF    ${condicao} == False
+
+    Aguardar elemento visível    ${supplier_user_first_access_relation}[input_seleciona_todos_acessos]
+    Clicar elemento via js       input[class=custom-control-input][value=true]
+    Capturar evidência
+    Clicar botão                 Avançar
+
+    ELSE
+
+    Validar texto igual    ${supplier_user_first_access_relation}[campo_alerta_sem_acessos]                                                                                                    
+    ...                    Você não possui acessos do Mercado Eletrônico com o e-mail do cadastro realizado. Fale conosco pelo e-mail marketplace@me.com.br e teremos o prazer de ajudá-lo!
+    Capturar evidência
+    Clicar elemento        ${supplier_user_first_access_relation}[link_sair]
+    Pass Execution         Usuário Keycloak sem acessos ME Web relacionados
+
+    END
+
+    END
+
     # Fechando billing modal
     ${condicao}=    Run Keyword And Return Status
     ...             Aguardar elemento visível        ${supplier_inbox}[modal_billing]
@@ -130,6 +161,22 @@ Login Keycloak
     # Validando login
     Clicar elemento        ${card_perfil}[btn_abrir_card_perfil]
     Validar texto igual    ${card_perfil}[campo_nome_usuario]       ${dados_login}[nome]
+
+    # Validando idioma
+    ${condicao}=    Run Keyword And Return Status
+    ...             Get Text                         
+    ...             ${header}[card_perfil]           contains    Português BR
+
+    IF    ${condicao} == False
+
+    Clicar elemento    ${card_perfil}[link_lista_idiomas]
+    Clicar elemento    ${card_perfil}[link_pt_br]
+
+    ELSE
+
+    Clicar elemento    ${card_perfil}[btn_fechar_card_perfil]
+
+    END
 
 # Realiza logoff de usuários
 Logoff MEWeb

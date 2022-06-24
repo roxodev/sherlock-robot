@@ -11,7 +11,7 @@ Test Teardown    Capturar evidência
 
 *Test Cases
 Ocultar resposta pública de fornecedor privado no novo mapa comparativo
-    [Tags]    # e2e
+    [Tags]    e2e
     ...       cotacao_publica
     ...       ocultar_resposta_publica
     ...       ocultar_resposta_publica_novo_mapa

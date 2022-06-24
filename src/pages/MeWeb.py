@@ -10,6 +10,9 @@ def factory_po_meweb(target):
                 # botões
                 'btn_abrir_card_perfil': 'css=div[class=avatar] span[class=b-avatar-badge]',
                 'btn_fechar_card_perfil': 'css=div[class=profile-content] span[class=b-avatar-badge]',
+                'btn_meus_acessos': 'css=i[class="me-icon-l icon-cog"]',
+                'btn_lista_alterar_acesso': 'css=i[class="me-icon-l icon-exchange"]',
+                'btn_alterar_acesso': 'css=div[class=user-login]:first-child button',
 
                 # campos
                 'campo_nome_usuario': 'css=div[class="user-name"]',
@@ -281,6 +284,37 @@ def factory_po_meweb(target):
 
                 # botões
                 'btn_login': 'id=kc-login'
+            },
+
+            # página /supplier/user/
+            'supplier_user': {
+                # campos
+                'campo_titulo': 'css=div[class=page-title] >> text=Meus Acessos',
+
+                # tabelas
+                'tbl_acessos_vinculados': 'css=div[class="tab-pane me-tabs-item active"]:first-child',
+                'tbl_acessos_desvinculados': 'css=div[class="tab-pane me-tabs-item active"]:last-child',
+
+                # toaster
+                'toaster_acessos': 'css=div[class=toast-body] span',
+            },
+
+            # página /supplier/user/firstAccess
+            'supplier_user_first_access': {
+                # campos
+                'campo_titulo_controle_de_acesso': 'css=h1[class=title] >> text=Empresas e Controle de acesso'
+            },
+
+            # página /supplier/user/firstAccess/relation
+            'supplier_user_first_access_relation': {
+                # inputs
+                'input_seleciona_todos_acessos': 'css=input[class=custom-control-input][value=true]',
+
+                # campos
+                'campo_alerta_sem_acessos': 'css=div[class="my-2 text-center"]',
+
+                # links
+                'link_sair': 'div[class="button-bar"] a >> text=Sair'
             },
 
             # página /timezone.mvc

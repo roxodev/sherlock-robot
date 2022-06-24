@@ -19,21 +19,26 @@ node {
         
       try {
         me.stage('Run Tests') {
-          sh "robot -d ./logs -i ${params.tag} -v env:${params.env} -v headless:${params.headless} tests/ || robot -d ./logs/retry -v env:${params.env} -v headless:${params.headless} --rerunfailed ./logs/output.xml --output output.xml tests/ | rebot -d ./logs --merge ./logs/output.xml ./logs/retry/output.xml"
-        }
+          sh "robot -d ./logs -i ${params.tag} -v env:${params.env} -v headless:${params.headless} tests/ || robot -d ./logs/retry -v env:${params.env} -v headless:${params.headless} --rerunfailed ./logs/output.xml --output output.xml tests/"
+        
+          if (fileExists('./logs/retry/browser')) {
+            sh "cp \$(find ./logs/retry/browser -type f -name '*.png') ./logs/browser/screenshot && rebot -d ./logs --merge ./logs/output.xml ./logs/retry/output.xml"
 
-      } finally {
-        me.stage('Create Report') {
-          if (fileExists('./logs/retry/browser/screenshot')) {
-            sh "cp \$(find ./logs/retry/browser -type f -name '*.png') ./logs/browser/screenshot"
+          } else if (fileExists('./logs/retry')) {
+            sh "rebot -d ./logs --merge ./logs/output.xml ./logs/retry/output.xml"
           }
-          
+
+        }
+        
+      } finally {
+
+        me.stage('Create Report') {
           robot archiveDirName: 'robot-plugin', enableCache: false, logFileName: '**/logs/log.html', otherFiles: '**/logs/**/*.png', outputFileName: '**/logs/output.xml', outputPath: '', overwriteXAxisLabel: '', reportFileName: '**/logs/report.html'
         }
 
         me.stage('Destroy Environment') {
           sh "rm -rf **/logs"
-          cleanWs()     
+          cleanWs()
         }
       }
     }

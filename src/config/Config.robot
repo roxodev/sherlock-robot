@@ -33,11 +33,6 @@ Configurar ambiente
     Set Global Variable    ${payload_signin}
     Set Global Variable    ${payload_auth}
 
-    # Executando seed requests
-    Vincular acessos
-    Desvincular acessos
-    Definir usuário corrente
-
     # Instanciando configurações meweb
     ${base_url_keycloak}=    Set Variable    ${CONFIG}[e2e][base_url_keycloak]
     ${base_url_meweb}=       Set Variable    ${CONFIG}[e2e][base_url_meweb]
@@ -47,27 +42,30 @@ Configurar ambiente
     ${sql}=    Set Variable    ${CONFIG}[sql]
 
     # Instanciando page objects
-    ${card_perfil}=                       Set Variable    ${PO_MEWEB}[card_perfil]
-    ${comparative_panel}=                 Set Variable    ${PO_MEWEB}[comparative_panel]
-    ${comum}=                             Set Variable    ${PO_MEWEB}[comum]                             
-    ${cotacao_nova_asp}=                  Set Variable    ${PO_MEWEB}[cotacao_nova_asp]
-    ${default_asp}=                       Set Variable    ${PO_MEWEB}[default_asp]
-    ${header}=                            Set Variable    ${PO_MEWEB}[header]
-    ${home_transactions}=                 Set Variable    ${PO_MEWEB}[home_transactions]
-    ${mercado_compras}=                   Set Variable    ${PO_MEWEB}[mercado_compras]
-    ${modal_mapa_comparativo_default}=    Set Variable    ${PO_MEWEB}[modal_mapa_comparativo_default]
-    ${modal_resp_cota_item}=              Set Variable    ${PO_MEWEB}[modal_resp_cota_item]
-    ${modal_novidades_segmentos}=         Set Variable    ${PO_MEWEB}[modal_novidades_segmentos]
-    ${modal_show_cotacao}=                Set Variable    ${PO_MEWEB}[modal_show_cotacao]
-    ${muda_senha_asp}=                    Set Variable    ${PO_MEWEB}[muda_senha_asp]
-    ${supplier_info}=                     Set Variable    ${PO_MEWEB}[supplier_info]
-    ${supplier_register}=                 Set Variable    ${PO_MEWEB}[supplier_register]
-    ${supplier_segments}=                 Set Variable    ${PO_MEWEB}[supplier_segments]
-    ${supplier_segments_add}=             Set Variable    ${PO_MEWEB}[supplier_segments_add]
-    ${supplier_search}=                   Set Variable    ${PO_MEWEB}[supplier_search]
-    ${supplier_inbox}=                    Set Variable    ${PO_MEWEB}[supplier_inbox]
-    ${supplier_sso_auth}=                 Set Variable    ${PO_MEWEB}[supplier_sso_auth]
-    ${timezone_mvc}=                      Set Variable    ${PO_MEWEB}[timezone_mvc]
+    ${card_perfil}=                            Set Variable    ${PO_MEWEB}[card_perfil]
+    ${comparative_panel}=                      Set Variable    ${PO_MEWEB}[comparative_panel]
+    ${comum}=                                  Set Variable    ${PO_MEWEB}[comum]                                  
+    ${cotacao_nova_asp}=                       Set Variable    ${PO_MEWEB}[cotacao_nova_asp]
+    ${default_asp}=                            Set Variable    ${PO_MEWEB}[default_asp]
+    ${header}=                                 Set Variable    ${PO_MEWEB}[header]
+    ${home_transactions}=                      Set Variable    ${PO_MEWEB}[home_transactions]
+    ${mercado_compras}=                        Set Variable    ${PO_MEWEB}[mercado_compras]
+    ${modal_mapa_comparativo_default}=         Set Variable    ${PO_MEWEB}[modal_mapa_comparativo_default]
+    ${modal_resp_cota_item}=                   Set Variable    ${PO_MEWEB}[modal_resp_cota_item]
+    ${modal_novidades_segmentos}=              Set Variable    ${PO_MEWEB}[modal_novidades_segmentos]
+    ${modal_show_cotacao}=                     Set Variable    ${PO_MEWEB}[modal_show_cotacao]
+    ${muda_senha_asp}=                         Set Variable    ${PO_MEWEB}[muda_senha_asp]
+    ${supplier_info}=                          Set Variable    ${PO_MEWEB}[supplier_info]
+    ${supplier_register}=                      Set Variable    ${PO_MEWEB}[supplier_register]
+    ${supplier_segments}=                      Set Variable    ${PO_MEWEB}[supplier_segments]
+    ${supplier_segments_add}=                  Set Variable    ${PO_MEWEB}[supplier_segments_add]
+    ${supplier_search}=                        Set Variable    ${PO_MEWEB}[supplier_search]
+    ${supplier_inbox}=                         Set Variable    ${PO_MEWEB}[supplier_inbox]
+    ${supplier_sso_auth}=                      Set Variable    ${PO_MEWEB}[supplier_sso_auth]
+    ${supplier_user}=                          Set Variable    ${PO_MEWEB}[supplier_user]
+    ${supplier_user_first_access}=             Set Variable    ${PO_MEWEB}[supplier_user_first_access]
+    ${supplier_user_first_access_relation}=    Set Variable    ${PO_MEWEB}[supplier_user_first_access_relation]
+    ${timezone_mvc}=                           Set Variable    ${PO_MEWEB}[timezone_mvc]
 
     # Disponibilizando configurações meweb
     Set Global Variable    ${base_url_keycloak}
@@ -98,6 +96,9 @@ Configurar ambiente
     Set Global Variable    ${supplier_search}
     Set Global Variable    ${supplier_inbox}
     Set Global Variable    ${supplier_sso_auth}
+    Set Global Variable    ${supplier_user}
+    Set Global Variable    ${supplier_user_first_access}
+    Set Global Variable    ${supplier_user_first_access_relation}
     Set Global Variable    ${timezone_mvc}
 
     # Executando queries de configuração de ambiente
@@ -105,7 +106,6 @@ Configurar ambiente
     Atualizar política RFQ
     Excluir segmentos e abrangência
     Incluir segmentos e abrangência
-
 
 Capturar access token meweb
     POST API    ${accounts_api}/signin

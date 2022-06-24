@@ -19,7 +19,7 @@ Clicar elemento
 Clicar botão
     [Arguments]    ${texto_botao}
 
-    ${botao}    Set Variable    css=button >> text=${texto_botao}
+    ${botao}    Set Variable    css=button >> text='${texto_botao}'
 
     Aguardar elemento visível    ${botao}
     Click                        ${botao}
@@ -28,7 +28,7 @@ Clicar botão
 Clicar link
     [Arguments]    ${texto_link}
 
-    ${link}    Set Variable    css=a >> text=${texto_link}
+    ${link}    Set Variable    css=a >> text='${texto_link}'
 
     Aguardar elemento visível    ${link}
     Click                        ${link}
